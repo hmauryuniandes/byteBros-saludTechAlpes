@@ -1,5 +1,14 @@
 # byteBros-saludtechalpes.
 
+## Instalar dependecias
+```bash
+pyenv install 3.10.7 -f && pyenv local 3.10.7
+```
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Ejecutar Aplicación
 
 Desde el directorio principal ejecute el siguiente comando.

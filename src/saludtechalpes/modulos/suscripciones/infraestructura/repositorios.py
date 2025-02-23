@@ -11,7 +11,6 @@ from saludtechalpes.modulos.suscripciones.dominio.repositorios import Repositori
 from saludtechalpes.modulos.suscripciones.dominio.entidades import Cliente, Suscripcion
 from saludtechalpes.modulos.suscripciones.dominio.fabricas import FabricaSuscripciones
 from .dto import Suscripcion as SuscripcionDTO
-from .dto import Cliente as ClienteDTO
 from .mapeadores import MapeadorSuscripcion
 from uuid import UUID
 
@@ -22,14 +21,8 @@ class RepositorioClientesSQLite(RepositorioClientes):
         raise NotImplementedError
 
     def obtener_todos(self) -> list[Suscripcion]:
-        cliente = Cliente()
-        cliente.codigo = Codigo('0001')
-        cliente.nombre = Nombre(nombres="Pablo", apellidos="Perez Prieto")
-        cliente.usuario = Usuario("pperez")
-        cliente.rut = Rut(1111111)
-        cliente.cedula = Cedula(22222222)
-        cliente.email = Email("pperez", "domain.com")
-        return [cliente]
+        # TODO
+        raise NotImplementedError
 
     def agregar(self, entity: Cliente):
         # TODO
@@ -55,7 +48,7 @@ class RepositorioSuscripcionesSQLite(RepositorioSuscripciones):
 
     def obtener_por_id(self, id: UUID) -> Suscripcion:
         suscripcion_dto = db.session.query(SuscripcionDTO).filter_by(id=str(id)).one()
-        return self.fabrica_suscripciones.crear_objeto(suscripcion_dto, MapeadorSuscripcion())
+        return self.fabrica_suscripciones.crear_objeto(suscripcion_dto, MapeadorCliente())
 
     def obtener_todos(self) -> list[Suscripcion]:
         # TODO
