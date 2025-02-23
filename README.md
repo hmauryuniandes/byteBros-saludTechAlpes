@@ -58,3 +58,8 @@ Los siguientes JSON pueden ser usados para probar el API:
    "faturas": []
 }
 ```
+
+### Correr docker-compose usando profiles
+```bash
+docker-compose --profile <pulsar|saludtechalpes> up
+```
