@@ -28,21 +28,17 @@ Los siguientes JSON pueden ser usados para probar el API:
 ```json
 {
    "cliente": {
-        "codigo": {
-            "valor": "0001"
-        },
+        "codigo": "0001",
         "nombre": {
             "nombres": "Pablo",
             "apellidos": "Perez Prieto"
         },
-        "usuario": {
-            "nombre": "pperez"
-        },
+        "usuario": "pperez",
         "rut": {
-            "numero": 1111111
+            "numero": 11111111
         },
         "cedula": {
-            "numero": 111222222221111
+            "numero": 22222222
         },
         "email": "pperez@domain.com"
    },
