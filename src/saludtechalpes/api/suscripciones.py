@@ -12,7 +12,7 @@ from saludtechalpes.modulos.suscripciones.aplicacion.mapeadores import MapeadorS
 
 bp = api.crear_blueprint('suscripciones', '/suscripciones')
 
-@bp.route('/suscripcion', methods=('POST',))
+@bp.route('/suscripcion-comando', methods=('POST',))
 def suscripcion():
     try:
         suscripcion_dict = request.json
@@ -26,14 +26,11 @@ def suscripcion():
         # Revise la clase Despachador de la capa de infraestructura
         ejecutar_commando(comando)
 
-        sr = ServicioSuscripcion()
-        dto_final = sr.crear_suscripcion(suscripcion_dto)
-
-        return map_suscripcion.dto_a_externo(dto_final)
+        return Response('{}', status=202, mimetype='application/json')
     except ExcepcionDominio as e:
         return Response(json.dumps(dict(error=str(e))), status=400, mimetype='application/json')
 
-@bp.route('/suscripcion/<id>', methods=('GET',))
+@bp.route('/suscripcion-query/<id>', methods=('GET',))
 def dar_suscripcion(id=None):
     query_resultado = ejecutar_query(ObtenerSuscripcion(id))
     map_suscripcion = MapeadorSuscripcionDTOJson()

@@ -6,7 +6,6 @@ persistir objetos dominio (agregaciones) en la capa de infraestructura del domin
 """
 
 from saludtechalpes.config.db import db
-from saludtechalpes.modulos.suscripciones.dominio.objetos_valor import Cedula, Codigo, Email, Nombre, Rut, Usuario
 from saludtechalpes.modulos.suscripciones.dominio.repositorios import RepositorioSuscripciones, RepositorioClientes
 from saludtechalpes.modulos.suscripciones.dominio.entidades import Cliente, Suscripcion
 from saludtechalpes.modulos.suscripciones.dominio.fabricas import FabricaSuscripciones
@@ -48,7 +47,7 @@ class RepositorioSuscripcionesSQLite(RepositorioSuscripciones):
 
     def obtener_por_id(self, id: UUID) -> Suscripcion:
         suscripcion_dto = db.session.query(SuscripcionDTO).filter_by(id=str(id)).one()
-        return self.fabrica_suscripciones.crear_objeto(suscripcion_dto, MapeadorCliente())
+        return self.fabrica_suscripciones.crear_objeto(suscripcion_dto, MapeadorSuscripcion())
 
     def obtener_todos(self) -> list[Suscripcion]:
         # TODO

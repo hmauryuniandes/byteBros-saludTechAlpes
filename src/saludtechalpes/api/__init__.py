@@ -17,6 +17,9 @@ def create_app(configuracion=None):
             'sqlite:///' + os.path.join(basedir, 'database.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+    app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
+    app.config['SESSION_TYPE'] = 'filesystem'
+
      # Inicializa la DB
     from saludtechalpes.config.db import init_db
     init_db(app)
