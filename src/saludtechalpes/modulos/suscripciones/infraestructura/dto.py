@@ -25,8 +25,8 @@ class Cliente(db.Model):
     nombres = db.Column(db.String, nullable=False)
     apellidos = db.Column(db.String, nullable=False)
     usuario = db.Column(db.String, nullable=False)
-    numero_rut = db.Column(db.Integer, nullable=True)
-    numero_cedula = db.Column(db.Integer, nullable=True)
+    numero_rut = db.Column(db.String, nullable=True)
+    numero_cedula = db.Column(db.String, nullable=True)
     email_address = db.Column(db.String, nullable=True)
     email_domain = db.Column(db.String, nullable=True)
 

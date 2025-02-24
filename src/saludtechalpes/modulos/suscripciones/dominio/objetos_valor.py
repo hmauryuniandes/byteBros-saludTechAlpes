@@ -28,11 +28,11 @@ class Email(ObjetoValor):
 
 @dataclass(frozen=True)
 class Cedula(ObjetoValor):
-    numero: int
+    numero: str
 
 @dataclass(frozen=True)
 class Rut(ObjetoValor):
-    numero: int
+    numero: str
 
 @dataclass(frozen=True)
 class MedioPago(ObjetoValor):

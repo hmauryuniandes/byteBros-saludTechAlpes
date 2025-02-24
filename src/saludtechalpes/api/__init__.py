@@ -8,17 +8,33 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def importar_modelos_alchemy():
     import saludtechalpes.modulos.suscripciones.infraestructura.dto
 
-def create_app(configuracion=None):
+def comenzar_consumidor():
+    """
+    Este es un código de ejemplo. Aunque esto sea funcional puede ser un poco peligroso tener 
+    threads corriendo por si solos. Mi sugerencia es en estos casos usar un verdadero manejador
+    de procesos y threads como Celery.
+    """
+
+    import threading
+    import saludtechalpes.modulos.suscripciones.infraestructura.consumidores as suscripciones
+
+    # Suscripción a eventos
+    threading.Thread(target=suscripciones.suscribirse_a_eventos).start()
+
+    # Suscripción a comandos
+    threading.Thread(target=suscripciones.suscribirse_a_comandos).start()
+   
+def create_app(configuracion={}):
     # Init la aplicacion de Flask
     app = Flask(__name__, instance_relative_config=True)
 
     # Configuracion de BD
-    app.config['SQLALCHEMY_DATABASE_URI'] =\
-            'sqlite:///' + os.path.join(basedir, 'database.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URL') or 'sqlite:///' + os.path.join(basedir, 'test_database.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
     app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['TESTING'] = configuracion.get('TESTING')
 
      # Inicializa la DB
     from saludtechalpes.config.db import init_db
@@ -30,6 +46,8 @@ def create_app(configuracion=None):
 
     with app.app_context():
         db.create_all()
+        if not app.config.get('TESTING'):
+            comenzar_consumidor()
 
      # Importa Blueprints
     from . import suscripciones

@@ -55,11 +55,16 @@ Los siguientes JSON pueden ser usados para probar el API:
         "codigo": "pro",
         "nombre": "PRO"
    },
-   "faturas": []
+   "facturas": []
 }
+```
+
+### docker build 
+```bash
+docker build . -f saludtechalpes.Dockerfile -t saludtechalpes/flask
 ```
 
 ### Correr docker-compose usando profiles
 ```bash
-docker-compose --profile <pulsar|saludtechalpes> up
+docker-compose --profile pulsar --profile saludtechalpes up
 ```

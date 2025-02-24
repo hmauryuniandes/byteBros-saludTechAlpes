@@ -38,12 +38,12 @@ class Factura(Entidad):
 class Suscripcion(AgregacionRaiz):
     cliente: Cliente = field(default_factory=Cliente)
     plan: Plan = field(default_factory=Plan)
-    faturas: list[Factura] = field(default_factory=list[Factura])
+    facturas: list[Factura] = field(default_factory=list[Factura])
 
     def crear_suscripcion(self, suscripcion):
         self.cliente = suscripcion.cliente
         self.plan = suscripcion.plan
-        self.faturas = suscripcion.plan
+        self.facturas = suscripcion.plan
 
         self.agregar_evento(SuscripcionCreada(codigo_plan=self.plan.codigo, codigo_cliente=self.cliente.codigo, id_suscripcion=self.id))
 
