@@ -6,37 +6,14 @@ persistir objetos dominio (agregaciones) en la capa de infraestructura del domin
 """
 
 from saludtechalpes.config.db import db
-from saludtechalpes.modulos.suscripciones.dominio.repositorios import RepositorioSuscripciones, RepositorioClientes
-from saludtechalpes.modulos.suscripciones.dominio.entidades import Cliente, Suscripcion
+from saludtechalpes.modulos.suscripciones.dominio.repositorios import RepositorioSuscripciones
+from saludtechalpes.modulos.suscripciones.dominio.entidades import Suscripcion
 from saludtechalpes.modulos.suscripciones.dominio.fabricas import FabricaSuscripciones
 from .dto import Suscripcion as SuscripcionDTO
 from .mapeadores import MapeadorSuscripcion
 from uuid import UUID
 
-class RepositorioClientesSQLite(RepositorioClientes):
-
-    def obtener_por_id(self, id: UUID) -> Cliente:
-        # TODO
-        raise NotImplementedError
-
-    def obtener_todos(self) -> list[Suscripcion]:
-        # TODO
-        raise NotImplementedError
-
-    def agregar(self, entity: Cliente):
-        # TODO
-        raise NotImplementedError
-
-    def actualizar(self, entity: Cliente):
-        # TODO
-        raise NotImplementedError
-
-    def eliminar(self, entity_id: UUID):
-        # TODO
-        raise NotImplementedError
-
-
-class RepositorioSuscripcionesSQLite(RepositorioSuscripciones):
+class RepositorioSuscripcionesPostgresSQL(RepositorioSuscripciones):
 
     def __init__(self):
         self._fabrica_suscripciones: FabricaSuscripciones = FabricaSuscripciones()

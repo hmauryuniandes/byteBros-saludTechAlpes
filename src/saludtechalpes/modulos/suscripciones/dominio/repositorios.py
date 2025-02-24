@@ -8,8 +8,6 @@ del dominio de suscripcion
 from abc import ABC
 from saludtechalpes.seedwork.dominio.repositorios import Repositorio
 
-class RepositorioClientes(Repositorio, ABC):
-    ...
 
 class RepositorioSuscripciones(Repositorio, ABC):
     ...
