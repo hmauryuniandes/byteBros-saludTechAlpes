@@ -1,4 +1,12 @@
-# byteBros-saludtechalpes.
+# byteBros-saludtechalpes: Microservicio Suscripciones
+
+## Miembros:
+
+- Monica Muñoz
+- Luz Ochoa
+- Andres Lombo
+- Humberto Maury
+
 
 ## Instalar dependecias
 ```bash
@@ -28,9 +36,9 @@ flask --app src/saludtechalpes./api --debug run
 
 Los siguientes JSON pueden ser usados para probar el API:
 
-### Reservar
+### Crear suscripción
 
-- **Endpoint**: `/suscripciones/suscripcion`
+- **Endpoint**: `/suscripciones/suscripcion-comando`
 - **Método**: `POST`
 - **Headers**: `Content-Type='aplication/json'`
 
@@ -68,3 +76,11 @@ docker build . -f saludtechalpes.Dockerfile -t saludtechalpes/flask
 ```bash
 docker-compose --profile pulsar --profile saludtechalpes up
 ```
+
+### Escenario de calidad 
+
+![screenshot](escenario_modificabilidad.png)
+
+### Escenarios de calidad 
+
+[Descargar Archivo](escenarios_calidad.pdf)
