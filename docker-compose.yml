@@ -122,6 +122,7 @@ services:
     image: saludtechalpes/flask 
     profiles: ["saludtechalpes"]
     networks:
+      - pulsar
       - suscripcion
     labels:
       SidecarDiscover: "false"
@@ -131,7 +132,6 @@ services:
       #   condition: service_healthy
     environment:
       - PULSAR_ADDRESS=broker
-      - BROKER_HOST=broker
       - TESTING=true
       - DB_URL=postgresql://postgres:postgres@suscripcion-db:5432/suscripcion-db
       - DB_USER=postgres
