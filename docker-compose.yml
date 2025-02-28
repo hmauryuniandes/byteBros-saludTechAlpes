@@ -74,5 +74,6 @@ services:
       - DB_HOST=suscripcion-db
       - DB_PORT=5432
       - DB_NAME=suscripcion-db
+      - PYTHONUNBUFFERED=1
     ports:
       - "5000:5000"

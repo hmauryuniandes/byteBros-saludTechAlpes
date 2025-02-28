@@ -5,6 +5,7 @@ class HandlerSuscripcionIntegracion(Handler):
 
     @staticmethod
     def handle_suscripcion_creada(evento):
+        print(f'########### handle_suscripcion_creada -> {evento}') 
         despachador = Despachador()
         despachador.publicar_evento(evento, 'eventos-suscripcion')
     

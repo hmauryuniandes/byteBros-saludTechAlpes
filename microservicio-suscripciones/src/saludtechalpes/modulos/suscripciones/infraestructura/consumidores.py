@@ -12,13 +12,16 @@ from saludtechalpes.seedwork.infraestructura import utils
 def suscribirse_a_eventos():
     cliente = None
     try:
+        print(f'########## suscribirse_a_eventos')
+
         cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
         consumidor = cliente.subscribe('eventos-suscripcion', consumer_type=_pulsar.ConsumerType.Shared,subscription_name='saludtechalpes-sub-eventos', schema=AvroSchema(EventoSuscripcionCreada))
+        
+        print(f'########## Esperando eventos')
 
         while True:
             mensaje = consumidor.receive()
             print(f'Evento recibido: {mensaje.value().data}')
-
             consumidor.acknowledge(mensaje)     
 
         cliente.close()
