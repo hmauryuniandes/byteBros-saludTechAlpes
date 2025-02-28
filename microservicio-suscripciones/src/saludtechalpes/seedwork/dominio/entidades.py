@@ -44,9 +44,3 @@ class AgregacionRaiz(Entidad, ValidarReglasMixin):
     
     def limpiar_eventos(self):
         self.eventos = list()
-
-
-@dataclass
-class Locacion(Entidad):
-    def __str__(self) -> str:
-        ...

@@ -22,10 +22,9 @@ class Despachador:
     def publicar_evento(self, evento, topico):
         # TODO Debe existir un forma de crear el Payload en Avro con base al tipo del evento
         payload = SuscripcionCreadaPayload(
-            id_reserva=str(evento.id_reserva), 
-            id_cliente=str(evento.id_cliente), 
-            estado=str(evento.estado), 
-            fecha_creacion=int(unix_time_millis(evento.fecha_creacion))
+            codigocliente=str(evento.codigo_cliente), 
+            codigo_plan=str(evento.codigo_plan), 
+            id_suscripcion=str(evento.id_suscripcion)
         )
         evento_integracion = EventoSuscripcionCreada(data=payload)
         self._publicar_mensaje(evento_integracion, topico, AvroSchema(EventoSuscripcionCreada))
