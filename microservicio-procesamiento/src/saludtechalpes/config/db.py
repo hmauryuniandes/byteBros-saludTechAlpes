@@ -1,0 +1,28 @@
+from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = "postgresql://admin:admin@localhost:5432/anonimizacion"
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+class DatosAnonimizadosDB(Base):
+    __tablename__ = "datos_anonimizados"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    id_imagen = Column(String, nullable=False, unique=True)
+    modalidad = Column(String, nullable=False)
+    patologia = Column(String, nullable=True)
+    region_anatomica = Column(String, nullable=True)
+    formato_imagen = Column(String, nullable=False)
+    fuente_de_datos = Column(String, nullable=False, default="***ANONIMIZADO***")  
+    antecedentes = Column(String, nullable=False, default="***ANONIMIZADO***")  
+    id_paciente = Column(String, nullable=False)
+    fecha_ingesta = Column(Integer, nullable=False)  
+
+    
+def init_db():
+    Base.metadata.create_all(bind=engine)
