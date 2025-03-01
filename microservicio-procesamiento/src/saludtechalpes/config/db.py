@@ -12,8 +12,16 @@ Base = declarative_base()
 class DatosAnonimizadosDB(Base):
     __tablename__ = "datos_anonimizados"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)  # 🔥 Genera automáticamente
-    datos_procesados = Column(String)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    id_imagen = Column(String, nullable=False, unique=True)
+    modalidad = Column(String, nullable=False)
+    patologia = Column(String, nullable=True)
+    region_anatomica = Column(String, nullable=True)
+    formato_imagen = Column(String, nullable=False)
+    fuente_de_datos = Column(String, nullable=False, default="***ANONIMIZADO***")  
+    antecedentes = Column(String, nullable=False, default="***ANONIMIZADO***")  
+    id_paciente = Column(String, nullable=False)
+    fecha_ingesta = Column(Integer, nullable=False)  
 
     
 def init_db():

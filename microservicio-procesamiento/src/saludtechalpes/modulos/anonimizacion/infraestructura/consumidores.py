@@ -1,28 +1,34 @@
 import threading
 from pulsar import Client, ConsumerType
-from modulos.anonimizacion.infraestructura.repositorios import RepositorioAnonimizacionSQL
+from modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
 
 class ConsumidorEventosPulsar:
     def __init__(self):
         self.cliente = Client('pulsar://localhost:6650')
         self.consumidor = self.cliente.subscribe('anonimizacion', subscription_name='sub_anon', consumer_type=ConsumerType.Shared)
-        self.repositorio = RepositorioAnonimizacionSQL()
+        self.repositorio = RepositorioImagenesSQL()
 
     def consumir(self):
         while True:
             mensaje = self.consumidor.receive()
             id_datos = mensaje.data().decode("utf-8")
-            print(f'📩 Evento recibido para: {id_datos}')
+            print(f'📩 Evento recibido para ID: {id_datos}')
 
-            resultado = self.repositorio.obtener(id_datos)
-
-            # 🔥 Agregamos un print para verificar si los datos existen en el repositorio
-            print(f'🔍 Buscando en repositorio: {resultado}')
+            resultado = self.repositorio.obtener_por_id(id_datos)
 
             if resultado:
-                print(f'✅ Datos Anonimizados: {resultado.datos_procesados}')
+                print("✅ Datos Anonimizados Recibidos:")
+                print(f"🆔 ID Imagen: {resultado['id_imagen']}")
+                print(f"📷 Modalidad: {resultado['modalidad']}")
+                print(f"🩻 Patología: {resultado['patologia']}")
+                print(f"🦴 Región Anatómica: {resultado['region_anatomica']}")
+                print(f"📂 Formato: {resultado['formato_imagen']}")
+                print(f"🏥 Fuente de Datos: {resultado['fuente_de_datos']}")
+                print(f"📜 Antecedentes: {resultado['antecedentes']}")
+                print(f"🔒 ID Paciente Anonimizado: {resultado['id_paciente']}")
+                print(f"📅 Año de Ingesta: {resultado['fecha_ingesta']}")
             else:
-                print(f'❌ No se encontraron datos para {id_datos}')
+                print(f'❌ No se encontraron datos para ID {id_datos}')
 
             self.consumidor.acknowledge(mensaje)
 

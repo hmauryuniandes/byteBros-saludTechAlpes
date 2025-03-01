@@ -1,27 +1,26 @@
 from flask import Flask, request, jsonify
 from modulos.anonimizacion.aplicacion.comandos.anonimizar_datos import Anonimizador
-from modulos.anonimizacion.infraestructura.repositorios import RepositorioAnonimizacionSQL
+from modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
 
 app = Flask(__name__)
 
-repositorio = RepositorioAnonimizacionSQL()
+repositorio = RepositorioImagenesSQL()
 anonimizador = Anonimizador()
 
 @app.route('/anonimizar', methods=['POST'])
 def anonimizar():
-    datos = request.get_json()
-    contenido = datos.get('contenido')
+    datos_imagen = request.get_json()
 
-    if not contenido:
-        return jsonify({"error": "Faltan datos"}), 400
+    campos_requeridos = {"id_imagen", "modalidad", "formato_imagen", "fuente_de_datos", "fecha_ingesta"}
+    if not campos_requeridos.issubset(set(datos_imagen.keys())):
+        return jsonify({"error": "Faltan campos requeridos"}), 400
 
-    # 🔥 Solo pasamos `contenido`, sin `id`
-    resultado = anonimizador.ejecutar(contenido)
+    resultado = anonimizador.ejecutar(datos_imagen)
 
-    # 🔥 Guardamos en la base de datos y obtenemos el nuevo ID
-    nuevo_id = repositorio.guardar(resultado)
-
-    return jsonify({"id": nuevo_id, "datos_procesados": resultado.datos_procesados})
+    return jsonify({
+        "id": resultado["id"],
+        "datos_procesados": resultado
+    })
 
 
 @app.route('/anonimizado/<int:id_datos>', methods=['GET'])

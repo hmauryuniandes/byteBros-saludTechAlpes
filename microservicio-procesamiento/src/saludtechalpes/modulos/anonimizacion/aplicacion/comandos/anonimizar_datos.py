@@ -1,23 +1,38 @@
-from modulos.anonimizacion.dominio.entidades import DatosAnonimizados
-from modulos.anonimizacion.dominio.eventos import EventoAnonimizacion
+from modulos.anonimizacion.dominio.entidades import ImagenAnonimizada
+from modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
+from modulos.anonimizacion.infraestructura.uow import UnidadTrabajoSQL
 from modulos.anonimizacion.infraestructura.despachadores import DespachadorEventosPulsar
-from modulos.anonimizacion.infraestructura.repositorios import RepositorioAnonimizacionSQL
+from datetime import datetime
+from modulos.anonimizacion.dominio.eventos import EventoAnonimizacion
 
+import uuid
 
 class Anonimizador:
     def __init__(self):
-        self.repositorio = RepositorioAnonimizacionSQL()
+        self.repositorio = RepositorioImagenesSQL()
+        self.uow = UnidadTrabajoSQL()
         self.despachador = DespachadorEventosPulsar()
 
-    def ejecutar(self, contenido: str):
-        datos_procesados = "***ANONIMIZADO***"
-        datos = DatosAnonimizados(id=None, datos_procesados=datos_procesados)
+    def ejecutar(self, datos_imagen: dict):
+        print(f'🔍 Procesando imagen con datos: {datos_imagen}')
 
-        # 🔥 Guardamos los datos en la BD y obtenemos el nuevo ID
-        nuevo_id = self.repositorio.guardar(datos)
+        imagen = ImagenAnonimizada(
+            id_imagen=datos_imagen["id_imagen"],
+            modalidad=datos_imagen["modalidad"],
+            patologia=datos_imagen.get("patologia", "Desconocido"),
+            region_anatomica=datos_imagen.get("region_anatomica", "No especificada"),
+            formato_imagen=datos_imagen["formato_imagen"],
+            fuente_de_datos="***ANONIMIZADO***",
+            antecedentes="***ANONIMIZADO***",
+            id_paciente=str(uuid.uuid4()),
+            fecha_ingesta=datetime.strptime(datos_imagen["fecha_ingesta"], "%Y-%m-%d %H:%M:%S").year
+        )
 
-        # 🔥 Ahora enviamos el evento con el ID correcto
-        self.despachador.despachar(EventoAnonimizacion(id_datos=str(nuevo_id)))
+        with self.uow.iniciar() as session:
+            nuevo_id = self.repositorio.guardar(imagen)
+            self.uow.confirmar()
 
-        return DatosAnonimizados(id=nuevo_id, datos_procesados=datos_procesados)
+        evento = EventoAnonimizacion(nuevo_id)
+        self.despachador.despachar(evento)
 
+        return {"id": nuevo_id, "datos_procesados": imagen.__dict__}
