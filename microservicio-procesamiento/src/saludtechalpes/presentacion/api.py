@@ -1,8 +1,12 @@
 from flask import Flask, request, jsonify
-from modulos.anonimizacion.aplicacion.comandos.anonimizar_datos import Anonimizador
-from modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
+from src.saludtechalpes.modulos.anonimizacion.aplicacion.comandos.anonimizar_datos import Anonimizador
+from src.saludtechalpes.modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
+from src.saludtechalpes.modulos.anonimizacion.infraestructura.consumidores import ConsumidorEventosPulsar
+import threading
+
 
 app = Flask(__name__)
+consumidor = ConsumidorEventosPulsar()
 
 repositorio = RepositorioImagenesSQL()
 anonimizador = Anonimizador()
@@ -21,15 +25,26 @@ def anonimizar():
         "id": resultado["id"],
         "datos_procesados": resultado
     })
+    
+@app.route('/consumir', methods=['GET'])
+def consumir():
+    """Ejecuta el consumidor en un hilo separado"""
+    print("🔄 Iniciando consumidor de anonimización en un hilo desde /consumir...")
+    
+    hilo_consumidor = threading.Thread(target=consumidor.consumir_anonimizacion, daemon=True)
+    hilo_consumidor.start()
+
+    return jsonify({"mensaje": "Consumidor iniciado, revisa los logs para ver los eventos"})
 
 
 @app.route('/anonimizado/<int:id_datos>', methods=['GET'])
 def obtener_anonimizado(id_datos):
-    resultado = repositorio.obtener(id_datos)
+    resultado = repositorio.obtener_por_id(id_datos)
+
     if resultado is None:
         return jsonify({"error": "Datos no encontrados"}), 404
 
-    return jsonify({"id": resultado.id, "datos_procesados": resultado.datos_procesados})
+    return jsonify(resultado)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
