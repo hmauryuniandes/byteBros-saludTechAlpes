@@ -13,7 +13,7 @@
 
 ### Correr docker-compose usando profiles
 ```bash
-docker-compose --profile pulsar --profile suscripciones --profile bff_web up
+docker-compose --profile pulsar --profile suscripciones --profile bff_web up --build
 ```
 
 ### Escenarios de calidad 

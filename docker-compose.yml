@@ -53,6 +53,9 @@ services:
   suscripciones:
     container_name: suscripciones
     hostname: suscripciones
+    build:
+      context: ./microservicio-suscripciones
+      dockerfile: suscripciones.Dockerfile
     image: suscripciones/flask 
     profiles: ["suscripciones"]
     networks:
@@ -79,6 +82,9 @@ services:
   bff_web:
     container_name: bff_web
     hostname: bff_web
+    build:
+      context: ./bff_web
+      dockerfile: bff_web.Dockerfile
     image: bff_web/flask 
     profiles: ["bff_web"]
     networks:
