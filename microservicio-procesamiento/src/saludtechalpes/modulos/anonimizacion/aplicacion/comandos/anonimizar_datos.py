@@ -1,9 +1,9 @@
-from modulos.anonimizacion.dominio.entidades import ImagenAnonimizada
-from modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
-from modulos.anonimizacion.infraestructura.uow import UnidadTrabajoSQL
-from modulos.anonimizacion.infraestructura.despachadores import DespachadorEventosPulsar
+from src.saludtechalpes.modulos.anonimizacion.dominio.entidades import ImagenAnonimizada
+from src.saludtechalpes.modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
+from src.saludtechalpes.modulos.anonimizacion.infraestructura.uow import UnidadTrabajoSQL
+from src.saludtechalpes.modulos.anonimizacion.infraestructura.despachadores import DespachadorEventosPulsar
 from datetime import datetime
-from modulos.anonimizacion.dominio.eventos import EventoAnonimizacion
+from src.saludtechalpes.modulos.anonimizacion.dominio.eventos import EventoAnonimizacion
 
 import uuid
 

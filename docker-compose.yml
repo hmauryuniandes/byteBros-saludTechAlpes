@@ -4,6 +4,8 @@ networks:
     driver: bridge
   suscripcion:
     driver: bridge
+  procesamiento:
+    driver: bridge
 services:
 
 # Start broker
@@ -75,6 +77,56 @@ services:
       - PYTHONUNBUFFERED=1
     ports:
       - "5000:5000"
+
+  procesamiento-db:
+    container_name: procesamiento-db
+    image: postgres:latest
+    restart: always
+    profiles: ["procesamiento"]
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=anonimizacion
+    ports:
+      - "5433:5432"  # Cambié el puerto externo para evitar conflicto
+    networks:
+      - procesamiento
+    volumes:
+      - ./microservicio-procesamiento/pgdata:/var/lib/postgresql/data/
+      - ./microservicio-procesamiento/sql/create_extension.sql:/docker-entrypoint-initdb.d/create_extension.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    
+  # Servicios de Salud Tech Alpes
+  procesamiento:
+
+    container_name: procesamiento
+    hostname: procesamiento
+    image: procesamiento/flask 
+    profiles: ["procesamiento"]
+    networks:
+      - pulsar
+      - procesamiento
+    labels:
+      SidecarDiscover: "false"
+    depends_on:
+      procesamiento-db:
+        condition: service_healthy
+    environment:
+      - PULSAR_ADDRESS=broker
+      - TESTING=true
+      - DB_URL=postgresql://admin:admin@procesamiento-db:5432/anonimizacion
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - DB_HOST=procesamiento-db
+      - DB_PORT=5432
+      - DB_NAME=anonimizacion
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5002:5000"
 
   bff_web:
     container_name: bff_web

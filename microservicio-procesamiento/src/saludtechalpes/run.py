@@ -1,5 +1,6 @@
-from presentacion.api import app
-from modulos.anonimizacion.infraestructura.consumidores import iniciar_consumidor
+from src.saludtechalpes.presentacion.api import app
+
+from src.saludtechalpes.modulos.anonimizacion.infraestructura.consumidores import iniciar_consumidor
 
 if __name__ == '__main__':
     iniciar_consumidor()

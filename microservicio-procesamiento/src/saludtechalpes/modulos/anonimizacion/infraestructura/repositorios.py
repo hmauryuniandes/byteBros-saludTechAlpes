@@ -1,5 +1,5 @@
-from modulos.seedwork.repositorios import Repositorio
-from config.db import SessionLocal, DatosAnonimizadosDB
+from src.saludtechalpes.modulos.seedwork.repositorios import Repositorio
+from src.saludtechalpes.config.db import SessionLocal, DatosAnonimizadosDB
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.dialects.postgresql import insert
@@ -11,10 +11,13 @@ class RepositorioImagenesSQL(Repositorio):
         self.db: Session = SessionLocal()
 
     def obtener_por_id(self, id):
-        """Obtiene una imagen anonimizada por ID"""
+        """Obtiene una imagen anonimizada por ID y la convierte en un diccionario"""
         db_datos = self.db.query(DatosAnonimizadosDB).filter_by(id=id).first()
-        return db_datos.__dict__ if db_datos else None
 
+        if db_datos:
+            return {column.name: getattr(db_datos, column.name) for column in db_datos.__table__.columns}  # 🔥 Convierte a dict limpio
+        
+        return None
     def guardar(self, imagen):
         print(f'💾 Guardando en DB: {imagen}')
 

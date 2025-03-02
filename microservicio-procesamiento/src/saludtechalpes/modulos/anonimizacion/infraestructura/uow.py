@@ -1,5 +1,5 @@
-from modulos.seedwork.uow import UnidadTrabajo
-from config.db import SessionLocal
+from src.saludtechalpes.modulos.seedwork.uow import UnidadTrabajo
+from src.saludtechalpes.config.db import SessionLocal
 
 class UnidadTrabajoSQL(UnidadTrabajo):
     """Unit of Work para manejar transacciones"""

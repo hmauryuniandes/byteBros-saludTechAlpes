@@ -1,4 +1,4 @@
-from modulos.seedwork.entidades import Entidad
+from src.saludtechalpes.modulos.seedwork.entidades import Entidad
 
 class ImagenAnonimizada(Entidad):
     """Entidad que representa una imagen procesada con anonimización"""
