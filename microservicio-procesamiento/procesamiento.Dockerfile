@@ -10,4 +10,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV FLASK_APP=src.saludtechalpes.run
 
-CMD ["flask", "--app", "src.saludtechalpes.run", "run", "--host=0.0.0.0"]
+CMD ["python", "-m", "src.saludtechalpes.run"]
+
