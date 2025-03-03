@@ -5,9 +5,12 @@ import time
 import logging
 import traceback
 
+from saludtechalpes.modulos.suscripciones.aplicacion.comandos.crear_suscripcion import CrearSuscripcion
 from saludtechalpes.modulos.suscripciones.infraestructura.schema.v1.eventos import EventoSuscripcionCreada
 from saludtechalpes.modulos.suscripciones.infraestructura.schema.v1.comandos import ComandoCrearSuscripcion
 from saludtechalpes.seedwork.infraestructura import utils
+from saludtechalpes.seedwork.aplicacion.comandos import ejecutar_commando
+from saludtechalpes.modulos.suscripciones.aplicacion.mapeadores import MapeadorSuscripcionDTOJson
 
 def suscribirse_a_eventos():
     cliente = None
@@ -31,7 +34,7 @@ def suscribirse_a_eventos():
         if cliente:
             cliente.close()
 
-def suscribirse_a_comandos():
+def suscribirse_a_comandos(app=None):
     cliente = None
     try:
         cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
@@ -39,9 +42,24 @@ def suscribirse_a_comandos():
 
         while True:
             mensaje = consumidor.receive()
-            print(f'Comando recibido: {mensaje.value().data}')
+            valor = mensaje.value()
 
-            consumidor.acknowledge(mensaje)     
+            print(f'Comando recibido: {mensaje.value()}')
+
+            try:
+                with app.app_context():
+                    suscripcion_dict = valor
+
+                    map_suscripcion = MapeadorSuscripcionDTOJson()
+                    suscripcion_dto = map_suscripcion.externo_a_dto(suscripcion_dict)
+
+                    comando = CrearSuscripcion(suscripcion_dto.cliente, suscripcion_dto.plan, suscripcion_dto.id, suscripcion_dto.facturas)
+                    ejecutar_commando(comando)
+            except:
+                logging.error('ERROR: Procesando comando!')
+                traceback.print_exc()
+
+            consumidor.acknowledge(mensaje)         
             
         cliente.close()
     except:

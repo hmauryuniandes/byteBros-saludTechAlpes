@@ -7,7 +7,7 @@ En este archivo usted encontrará las entidades del dominio de suscripcion
 from saludtechalpes.modulos.suscripciones.dominio.eventos import SuscripcionCreada
 from saludtechalpes.seedwork.dominio.entidades import AgregacionRaiz, Entidad
 from dataclasses import dataclass, field
-from .objetos_valor import Codigo, Fecha, Nombre, Email, Cedula, NombrePlan, Rut, MedioPago, Usuario, ValorMoneda
+from .objetos_valor import Codigo, Estado, Fecha, Nombre, Email, Cedula, NombrePlan, Rut, MedioPago, Usuario, ValorMoneda
 
 @dataclass
 class Cliente(Entidad):
@@ -39,11 +39,13 @@ class Suscripcion(AgregacionRaiz):
     cliente: Cliente = field(default_factory=Cliente)
     plan: Plan = field(default_factory=Plan)
     facturas: list[Factura] = field(default_factory=list[Factura])
+    estado: Estado
 
     def crear_suscripcion(self, suscripcion):
         self.cliente = suscripcion.cliente
         self.plan = suscripcion.plan
         self.facturas = suscripcion.plan
+        self.estado = 'Activo'
 
         self.agregar_evento(SuscripcionCreada(codigo_plan=self.plan.codigo, codigo_cliente=self.cliente.codigo, id_suscripcion=self.id))
 

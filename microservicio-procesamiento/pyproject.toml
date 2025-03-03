@@ -1,0 +1,17 @@
+[project]
+name = "saludtechalpes"
+version = "1.0.0"
+authors = [
+  { name="Juan Urrego", email="js.urrego110@uniandes.edu.co" },
+]
+description = "Proyecto de ejemplo de saludtechalpes"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = [
+  ".", "src",
+]

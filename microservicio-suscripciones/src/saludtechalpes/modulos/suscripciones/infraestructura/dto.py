@@ -46,3 +46,4 @@ class Suscripcion(db.Model):
     plan: Plan =  db.relationship("Plan", backref=db.backref("planes", uselist=False))
     fecha_creacion = db.Column(db.DateTime, nullable=False)
     fecha_actualizacion = db.Column(db.DateTime, nullable=False)
+    estado = db.Column(db.String)

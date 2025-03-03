@@ -1,8 +1,12 @@
-version: '3'
+
 networks:
   pulsar:
     driver: bridge
   suscripcion:
+    driver: bridge
+  procesamiento:
+    driver: bridge
+  notificaciones:
     driver: bridge
   serviciodatos:
     driver: bridge
@@ -33,7 +37,7 @@ services:
     container_name: suscripcion-db
     image: postgres:latest
     restart: always
-    profiles: ["saludtechalpes"]
+    profiles: ["suscripciones"]
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -42,11 +46,9 @@ services:
       - "5432:5432"
     networks:
       - suscripcion
-    depends_on:
-      - broker
     volumes:
-      - ./pgdata:/var/lib/postgresql/data/
-      - ./sql/create_extension.sql:/docker-entrypoint-initdb.d/create_extension.sql
+      - ./microservicio-suscripciones/pgdata:/var/lib/postgresql/data/
+      - ./microservicio-suscripciones/sql/create_extension.sql:/docker-entrypoint-initdb.d/create_extension.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -54,11 +56,14 @@ services:
       retries: 5
     
   # Servicios de Salud Tech Alpes
-  saludtechalpes:
-    container_name: saludtechalpes
-    hostname: saludtechalpes
-    image: saludtechalpes/flask 
-    profiles: ["saludtechalpes"]
+  suscripciones:
+    container_name: suscripciones
+    hostname: suscripciones
+    build:
+      context: ./microservicio-suscripciones
+      dockerfile: suscripciones.Dockerfile
+    image: suscripciones/flask 
+    profiles: ["suscripciones"]
     networks:
       - pulsar
       - suscripcion
@@ -79,6 +84,96 @@ services:
       - PYTHONUNBUFFERED=1
     ports:
       - "5000:5000"
+
+  procesamiento-db:
+    container_name: procesamiento-db
+    image: postgres:latest
+    restart: always
+    profiles: ["procesamiento"]
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=anonimizacion
+    ports:
+      - "5433:5432"
+    networks:
+      - procesamiento
+    volumes:
+      - ./microservicio-procesamiento/pgdata:/var/lib/postgresql/data/
+      - ./microservicio-procesamiento/sql/create_extension.sql:/docker-entrypoint-initdb.d/create_extension.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    
+  # Servicios de Salud Tech Alpes
+  procesamiento:
+
+    container_name: procesamiento
+    hostname: procesamiento
+    build:
+      context: ./microservicio-procesamiento
+      dockerfile: procesamiento.Dockerfile
+    image: procesamiento/flask 
+    profiles: ["procesamiento"]
+    networks:
+      - pulsar
+      - procesamiento
+    labels:
+      SidecarDiscover: "false"
+    depends_on:
+      procesamiento-db:
+        condition: service_healthy
+    environment:
+      - PULSAR_ADDRESS=broker
+      - TESTING=true
+      - DB_URL=postgresql://admin:admin@procesamiento-db:5432/anonimizacion
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - DB_HOST=procesamiento-db
+      - DB_PORT=5432
+      - DB_NAME=anonimizacion
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5002:5000"
+
+  bff_web:
+    container_name: bff_web
+    hostname: bff_web
+    build:
+      context: ./bff_web
+      dockerfile: bff_web.Dockerfile
+    image: bff_web/flask 
+    profiles: ["bff_web"]
+    networks:
+      - pulsar
+      - suscripcion
+    environment:
+      - PULSAR_ADDRESS=broker
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5005:5000"
+
+  # Servicio de notificaciones
+  notificaciones:
+    container_name: notificaciones
+    hostname: notificaciones
+    build:
+      context: ./microservicio-notificaciones
+      dockerfile: notificaciones.Dockerfile
+    image: notificaciones/flask 
+    profiles: ["notificaciones"]
+    networks:
+      - pulsar
+      - notificaciones    
+    environment:
+      - PULSAR_ADDRESS=broker
+      - TESTING=true      
+      - PYTHONUNBUFFERED=1        
+    ports:
+      - "5003:5000"   
+   
 
   serviciodatos-db:
     container_name: serviciodatos-db
