@@ -188,8 +188,6 @@ services:
       - "5434:5432"
     networks:
       - serviciodatos
-    depends_on:
-      - broker
     volumes:
       - ./microservicio-servicio-datos/pgdata:/var/lib/postgresql/data/
       - ./microservicio-servicio-datos/sql/create_extension.sql:/docker-entrypoint-initdb.d/create_extension.sql
@@ -202,6 +200,9 @@ services:
   serviciodatos:
     container_name: serviciodatos
     hostname: serviciodatos
+    build:
+      context: ./microservicio-servicio-datos
+      dockerfile: serviciodatos.Dockerfile
     image: serviciodatos/flask 
     profiles: ["serviciodatos"]
     networks:
