@@ -185,7 +185,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=serviciodatos-db
     ports:
-      - "5434:5432"
+      - "5435:5432"
     networks:
       - serviciodatos
     volumes:
