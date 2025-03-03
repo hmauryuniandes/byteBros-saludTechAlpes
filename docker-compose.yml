@@ -6,6 +6,8 @@ networks:
     driver: bridge
   procesamiento:
     driver: bridge
+  notificaciones:
+    driver: bridge
 services:
 
 # Start broker
@@ -147,3 +149,23 @@ services:
       - PYTHONUNBUFFERED=1
     ports:
       - "5005:5000"
+
+  # Servicio de notificaciones
+  notificaciones:
+    container_name: notificaciones
+    hostname: notificaciones
+    build:
+      context: ./microservicio-notificaciones
+      dockerfile: notificaciones.Dockerfile
+    image: notificaciones/flask 
+    profiles: ["notificaciones"]
+    networks:
+      - pulsar
+      - notificaciones    
+    environment:
+      - PULSAR_ADDRESS=broker
+      - TESTING=true      
+      - PYTHONUNBUFFERED=1        
+    ports:
+      - "5003:5000"   
+   
