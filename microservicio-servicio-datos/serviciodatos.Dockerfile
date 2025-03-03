@@ -1,6 +1,6 @@
 FROM python:3.10
 
-EXPOSE 5001/tcp
+EXPOSE 5000/tcp
 
 COPY requirements.txt ./
 RUN pip install --upgrade --no-cache-dir "pip<24.1" setuptools wheel
