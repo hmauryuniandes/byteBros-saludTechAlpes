@@ -155,6 +155,32 @@
     ### EventoConsultaAnonimizacion
         type: Dominio
 
+- Endpoints: 
+
+    **Endpoint**: `/anonimizar`
+
+    **Método**: `POST`
+
+    **Headers**: `Content-Type='aplication/json'`
+
+    ```json
+    {
+        "id_imagen": "46769a88-581f-4468-8a14-14f705887d01",
+        "modalidad": "Rayos X",
+        "patologia": "Neumonía",
+        "region_anatomica": "Cráneo",
+        "formato_imagen": "DICOM",
+        "fuente_de_datos": "Hospital del norte",
+        "antecedentes": "Diabético",
+        "id_paciente" : "46769a88-101f-4468-8i34-15750381d01",
+        "fecha_ingesta": "2024-02-01 09:10:00"
+    }
+    ```
+
+    **Endpoint**: `/anonimizado/<int:id_datos>`
+
+    **Método**: `GET`
+
 
 ## microservicio notificaciones
 
