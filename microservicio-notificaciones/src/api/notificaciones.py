@@ -7,7 +7,7 @@ import threading
 app = Flask(__name__)
 
 # Configuración de Pulsar
-pulsar_client = PulsarClient('pulsar://localhost:6650')
+pulsar_client = PulsarClient('pulsar://broker:6650')
 topic = 'suscripciones-topic'  # Tópico de eventos
 subscription_name = 'notificaciones-sub'  # Nombre de la suscripción
 
@@ -24,9 +24,9 @@ def iniciar_consumidor():
 thread = threading.Thread(target=iniciar_consumidor)
 thread.start()
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return jsonify({"message": "Microservicio de notificaciones en ejecución"}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5003)
+    app.run(host='0.0.0.0', port=5000, debug=True, )

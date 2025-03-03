@@ -1,5 +1,5 @@
-from infraestructura.pulsar_client import PulsarClient
-from aplicacion.event_processor import EventProcessor
+from src.modulos.notificaciones.infraestructura.pulsar_client import PulsarClient
+from src.modulos.notificaciones.aplicacion.event_processor import EventProcessor
 
 class Consumidor:
     def __init__(self, pulsar_client, topic, subscription_name, event_store):

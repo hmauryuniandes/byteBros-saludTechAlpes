@@ -1,5 +1,5 @@
-from aplicacion.notificacion import enviar_notificacion
-from infraestructura.event_store import EventStore
+from src.modulos.notificaciones.aplicacion.notificacion import enviar_notificacion
+from src.modulos.notificaciones.infraestructura.event_store import EventStore
 
 class EventProcessor:
     def __init__(self, event_store: EventStore):
