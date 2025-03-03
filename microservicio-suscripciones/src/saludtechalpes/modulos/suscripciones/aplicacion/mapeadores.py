@@ -97,17 +97,19 @@ class MapeadorSuscripcion(RepMap):
         )
         facturas = list()
         _id = str(entidad.id)
+        estado = str(entidad.estado)
 
-        return SuscripcionDTO(cliente, plan, facturas, _id)
+        return SuscripcionDTO(cliente=cliente, plan=plan, facturas=facturas, id=_id, estado=estado)
 
     def dto_a_entidad(self, dto: SuscripcionDTO) -> Suscripcion:
         cliente = self._procesar_cliente(dto.cliente)
         plan = self._procesar_plan(dto.plan)
+       
 
         #TODO
         # suscripcion.facturas = list()
 
-        return Suscripcion(cliente=cliente, plan=plan)
+        return Suscripcion(cliente=cliente, plan=plan, estado=dto.estado)
 
 
 

@@ -15,10 +15,15 @@ def suscripcion():
     # try:
     suscripcion_dict = request.json
     payload = dict(
-        # cliente = suscripcion_dict['cliente'],
-        # plan = suscripcion_dict['plan'],
-        # faturas = suscripcion_dict['facturas']
-        id_suscripcion = suscripcion_dict['id_suscripcion']
+        cliente_codigo = suscripcion_dict['cliente']['codigo'],
+        cliente_nombres = suscripcion_dict['cliente']['nombre']['nombres'],
+        cliente_apellidos = suscripcion_dict['cliente']['nombre']['apellidos'],
+        cliente_usuario = suscripcion_dict['cliente']['usuario'],
+        cliente_rut = suscripcion_dict['cliente']['rut']['numero'],
+        cliente_cedula = suscripcion_dict['cliente']['cedula']['numero'],
+        cliente_email = suscripcion_dict['cliente']['email'],
+        plan_codigo =  suscripcion_dict['plan']['codigo'],
+        plan_nombre =  suscripcion_dict['plan']['nombre'],
     )
     comando = dict(
         id = str(uuid.uuid4()),

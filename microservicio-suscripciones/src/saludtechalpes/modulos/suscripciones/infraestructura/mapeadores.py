@@ -70,6 +70,7 @@ class MapeadorSuscripcion(Mapeador):
         suscripcion_dto.fecha_actualizacion = entidad.fecha_actualizacion
         suscripcion_dto.fecha_actualizacion = entidad.fecha_actualizacion
         suscripcion_dto.id = str(entidad.id)
+        suscripcion_dto.estado = entidad.estado
 
         return suscripcion_dto
 
@@ -79,5 +80,6 @@ class MapeadorSuscripcion(Mapeador):
         suscripcion.plan = self._procesar_plan_dto(dto.plan)
         suscripcion.fecha_creacion = dto.fecha_creacion
         suscripcion.fecha_actualizacion = dto.fecha_actualizacion
+        suscripcion.estado = dto.estado
 
         return suscripcion

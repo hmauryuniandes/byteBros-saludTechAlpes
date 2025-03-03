@@ -52,3 +52,8 @@ class ValorMoneda(ObjetoValor):
 class Fecha(ObjetoValor):
     valor: datetime
 
+@dataclass(frozen=True)
+class Estado(ObjetoValor):
+    valor: str
+
+
