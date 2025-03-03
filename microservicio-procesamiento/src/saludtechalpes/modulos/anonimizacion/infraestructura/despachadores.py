@@ -6,7 +6,7 @@ class DespachadorEventosPulsar:
     def __init__(self):
         self.cliente = Client('pulsar://broker:6650')
         self.productor_anonimizacion = self.cliente.create_producer('anonimizacion')
-        self.productor_consulta = self.cliente.create_producer('consulta_anonimizacion')  # 🔥 Nuevo tópico
+        self.productor_consulta = self.cliente.create_producer('consulta_anonimizacion')
 
     def despachar(self, evento):
         if isinstance(evento, EventoAnonimizacion):

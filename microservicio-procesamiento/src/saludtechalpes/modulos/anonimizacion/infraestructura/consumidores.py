@@ -6,7 +6,7 @@ class ConsumidorEventosPulsar:
     def __init__(self):
         self.cliente = Client('pulsar://broker:6650')
 
-        # 🔥 Dos consumidores: uno para anonimización y otro para consulta
+        # Dos consumidores: uno para anonimización y otro para consulta
         self.consumidor_anonimizacion = self.cliente.subscribe(
             'anonimizacion', subscription_name='sub_anon', consumer_type=ConsumerType.Shared
         )

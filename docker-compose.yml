@@ -1,4 +1,4 @@
-version: '3'
+
 networks:
   pulsar:
     driver: bridge
@@ -93,7 +93,7 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=anonimizacion
     ports:
-      - "5433:5432"  # Cambié el puerto externo para evitar conflicto
+      - "5433:5432"
     networks:
       - procesamiento
     volumes:
@@ -110,6 +110,9 @@ services:
 
     container_name: procesamiento
     hostname: procesamiento
+    build:
+      context: ./microservicio-procesamiento
+      dockerfile: procesamiento.Dockerfile
     image: procesamiento/flask 
     profiles: ["procesamiento"]
     networks:
