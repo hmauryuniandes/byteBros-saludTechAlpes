@@ -105,7 +105,56 @@
 
 ## microservicio procesamiento
 
-[README](./microservicio-suscripciones/README.md)
+- Responsable: Andrés Lombo
+- Documentación: [README](./microservicio-suscripciones/README.md)
+- Actividades: 
+
+    [x] Definir la entidad raiz, entidades y objetos valor.
+
+    [x] Implementar repositorios de acceso a datos usando postgresDB.
+
+    [x] Definir los comandos en la capa de aplicacion. 
+
+    [x] Definir los queries en la capa de aplicacion.
+
+    [x] Definir los eventos en la capa de dominio.
+
+    [x] Definir consumidores que se suscriben a los topicos de eventos y comandos. 
+
+    [x] Definir despachadores para publicar eventos de dominio. 
+
+    [x] Configurar Dockerfile y actualizar el docker-compose.
+
+- Comandos: 
+
+    ### ComandoCrearSuscripcion:
+        
+        schema-type: AVRO
+
+        Payload:
+    ```py
+            class ImagenAnonimizada(Entidad):
+                self.id_imagen = id_imagen
+            self.modalidad = modalidad
+            self.patologia = patologia
+            self.region_anatomica = region_anatomica
+            self.formato_imagen = formato_imagen
+            self.fuente_de_datos = fuente_de_datos
+            self.antecedentes = antecedentes
+            self.id_paciente = id_paciente
+            self.fecha_ingesta = fecha_ingesta
+    ```   
+
+- Queries:
+    ### ObtenerImagenAnonimizada
+
+- Eventos:
+    ### EventoAnonimizacion
+        type: Dominio
+
+    ### EventoConsultaAnonimizacion
+        type: Dominio
+
 
 ## microservicio notificaciones
 
@@ -166,7 +215,7 @@
 
 ### Correr docker-compose usando profiles
 ```bash
-docker-compose --profile pulsar --profile suscripciones --profile procesamiento --profile bff_web up --build
+docker-compose --profile pulsar --profile suscripciones --profile procesamiento --profile bff_web up --profile notificaciones --profile serviciodatos up -d --build
 ```
 
 
