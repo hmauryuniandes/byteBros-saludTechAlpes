@@ -185,7 +185,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=serviciodatos-db
     ports:
-      - "5432:5432"
+      - "5434:5432"
     networks:
       - serviciodatos
     depends_on:
@@ -223,4 +223,4 @@ services:
       - DB_NAME=serviciodatos-db
       - PYTHONUNBUFFERED=1
     ports:
-      - "5000:5000"
+      - "5001:5000"
