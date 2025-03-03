@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 DATABASE_URL = os.environ.get('DB_URL')
-
+print(f"Conectando a la base de datos en: {DATABASE_URL}")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -27,4 +27,6 @@ class DatosAnonimizadosDB(Base):
 
     
 def init_db():
+    print("Creando tablas en la base de datos...")
     Base.metadata.create_all(bind=engine)
+    print("Tablas creadas.")

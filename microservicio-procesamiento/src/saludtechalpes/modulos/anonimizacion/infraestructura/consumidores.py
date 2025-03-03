@@ -57,3 +57,4 @@ def iniciar_consumidor():
 
     hilo_anonimizacion.start()
     hilo_consulta.start()
+    print("HILOS INICIADOS")
