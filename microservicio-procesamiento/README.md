@@ -9,17 +9,14 @@
 
 ## Request de ejemplo
 
-Los siguientes JSON pueden ser usados para probar el API:
 
-### docker build 
-```bash
-docker build . -f procesamiento.Dockerfile -t procesamiento/flask
-```
 
 ### Correr docker-compose usando profiles
 ```bash
-docker-compose --profile pulsar --profile procesamiento up
+docker-compose --profile pulsar --profile procesamiento up -d --build
 ```
+
+Los siguientes JSON pueden ser usados para probar el API:
 
 ### Procesar imagen
 
