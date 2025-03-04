@@ -19,10 +19,13 @@ def millis_a_datetime(millis):
     return datetime.datetime.fromtimestamp(millis/1000.0)
 
 def broker_host():
-    return os.getenv(PULSAR_ENV, default="localhost")
+    return os.getenv(PULSAR_ENV, default="broker")
 
 def consultar_schema_registry(topico: str) -> dict:
-    json_registry = requests.get(f'http://{broker_host()}:8080/admin/v2/schemas/{topico}/schema').json()
+    schema = requests.get(f'http://{broker_host()}:8080/admin/v2/schemas/{topico}/schema')
+    print(f'########### schema -> {schema}') 
+    json_registry = schema.json()
+    print(f'########### json_registry -> {json_registry}') 
     return json.loads(json_registry.get('data',{}))
 
 def obtener_schema_avro_de_diccionario(json_schema: dict) -> AvroSchema:

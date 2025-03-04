@@ -39,7 +39,7 @@ class Suscripcion(AgregacionRaiz):
     cliente: Cliente = field(default_factory=Cliente)
     plan: Plan = field(default_factory=Plan)
     facturas: list[Factura] = field(default_factory=list[Factura])
-    estado: Estado
+    estado: Estado = field(default_factory=str)
 
     def crear_suscripcion(self, suscripcion):
         self.cliente = suscripcion.cliente

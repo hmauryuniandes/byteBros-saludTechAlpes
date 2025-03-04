@@ -33,4 +33,4 @@ class SuscripcionDTO(DTO):
     plan: PlanDTO = field(default_factory=PlanDTO)
     facturas: list[FacturaDTO] = field(default_factory=list[FacturaDTO])
     id: str = field(default_factory=str)
-    estado: str
+    estado: str = field(default_factory=str) 

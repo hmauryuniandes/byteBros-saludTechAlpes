@@ -7,15 +7,15 @@
 - Andres Lombo
 - Humberto Maury
 
-### Diagrama de la solución
+## Diagrama de la solución
 
 ![screenshot](saludtechalpes.drawio.png)
 
-### Escenarios de calidad 
+## Escenarios de calidad 
 
 [Descargar Archivo](escenarios_calidad.pdf)
 
-### Escenarios de calidad a implementar
+## Escenarios de calidad a implementar
 1. Escenario de calidad 3: Escalabilidad con Concurrencia(Load Balancer)
 Evalúala capacidaddel sistemapara manejaraltos volúmenesde solicitudes concurrentes, distribuyéndolasde maneraeficienteentre las instanciasdel sistemamedianteun patrónde Load Balancer. El sistemadebeser capazde procesarpaquetesde imágenes, distribuyendola carga entre diversasinstanciasde procesamiento, manteniendola baja latencia, altadisponibilidady toleranciaa fallos, especialmenteal manejareventosde procesamientogeneradosporelsistema.
 
@@ -26,23 +26,33 @@ El sistema debe garantizar la integridad y seguridad de los datos en las transac
 El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, asegurandobajo acoplamientoy facilitandola integraciónde nuevosproductosy cambiossin afectarla arquitecturaexistente.
 
 ## Decisiones de diseño
-- Los microservicios con bases de datos son: suscripciones, procesamiento y servicio de datos
+
+- Los microservicios con bases de datos son: suscripciones, procesamiento y servicio de datos.
+
 - Administración de datos desentralizada: La administración de bases de datos descentralizada se implementará debido a su capacidad para mejorar la escalabilidad, el rendimiento y la resiliencia del sistema. Al permitir que cada microservicio gestione su propia base de datos, se evita el acoplamiento, lo que facilita el desarrollo independiente y reduce los cuellos de botella. Además, se mejora la seguridad, ya que cada equipo puede gestionar accesos y permisos de forma autónoma. Aunque esto implica una mayor complejidad en la gestión de datos y transacciones, la base de datos descentralizada se alinea con las decisiones tomadas sobre el uso de comandos y eventos.
+
 - Patrón de almacenamiento: los microservicios con base de datos se usará el módelo CRUD y para el microservicio de notificacicones Event sourcing.
+
 - Patrón Saga: en el proceso de suscripciones de planes PRO debido a que se requiere una transacción distribuida para garantizar la correcta creación de todos los recursos necesarios para dicho tipo de servicios, donde tendremos una transacción larga a través de los microservicios de suscripción, servicio de datos y notificación. Además se apoyará la persistencia de estados en Apache Pulsar.
+
 - Los servicios necesarios para la implementación del proyecto serán desplegados en GCP, basados en los conocimientos del equipo de implementación.
 
+- La arquitectura de microservicios con bases de datos descentralizada favorece la escalabilidad, principalmente el microservicio de procesamiento de datos necesitará poder escalar horizontalmente, tal tal forma se busca atender multiples procesos de aninimizado en paralelo despues de la carga de muchas imagenes por parte de los centros de salud. 
+
 ## Microservicios
+
 1. Suscripciones
 2. Procesamiento
 3. Servicio de datos
 4. Notificaciones
 
-## microservicio suscripciones
+## Microservicio suscripciones
 
-- Responsable: Humberto Maury
-- Documentación: [README](./microservicio-suscripciones/README.md)
-- Actividades: 
+**Responsable**: Humberto Maury
+
+**Documentación**: [README](./microservicio-suscripciones/README.md)
+
+**Actividades**: 
 
     [x] Definir la entidad raiz, entidades y objetos valor.
 
@@ -62,70 +72,77 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
 
     [x] Configurar Dockerfile y actualizar el docker-compose.
 
-- Comandos: 
+### Comandos: 
 
-    ### ComandoCrearSuscripcion:
+**ComandoCrearSuscripcion**:
         
-        schema-type: Cloud event + AVRO
+    schema-type: Cloud event + AVRO
 
-        version: v1
+    version: v1
 
-        Payload:
-    ```py
-            class ComandoCrearSuscripcionPayload(ComandoIntegracion):
-                cliente_codigo = String()
-                cliente_nombres = String()
-                cliente_apellidos = String()
-                cliente_usuario = String()
-                cliente_rut = String()
-                cliente_cedula = String()
-                cliente_email = String()
-                plan_codigo = String()
-                plan_nombre = String()
-    ```    
-    ### ComandoCambiarPlanSuscripcion:
+    Payload:
+
+```py
+        class ComandoCrearSuscripcionPayload(ComandoIntegracion):
+            cliente_codigo = String()
+            cliente_nombres = String()
+            cliente_apellidos = String()
+            cliente_usuario = String()
+            cliente_rut = String()
+            cliente_cedula = String()
+            cliente_email = String()
+            plan_codigo = String()
+            plan_nombre = String()
+```    
+**ComandoCambiarPlanSuscripcion:**
         
-        Schema-type: Cloud event + AVRO
+    Schema-type: Cloud event + AVRO
 
-        Version: v1
+    Version: v1
 
-        Payload: TBD
+    Payload: TBD
 
-    ### ComandoCancelarSuscripcion:
+**ComandoCancelarSuscripcion:**
+    
+    Schema-type: Cloud event + AVRO
+
+    Version: v1
+
+    Payload: TBD
+
+**ComandoPagarSuscripcion:**
+    
+    Schema-type: Cloud event + AVRO
+
+    Version: v1
+
+    Payload: TBD
         
-        Schema-type: Cloud event + AVRO
+### Eventos: 
 
-        Version: v1
+**EventoSuscripcionCreada**
 
-        Payload: TBD
+    type: Integracion - Fact
 
-    ### ComandoPagarSuscripcion:
-        
-        Schema-type: Cloud event + AVRO
+**EventoSuscripcionCancelada**
 
-        Version: v1
+    type: Integracion - Fact
 
-        Payload: TBD
-        
-- Eventos: 
+**EventoSuscripcionPlanModificado**
 
-    ### EventoSuscripcionCreada
-        type: Integracion - Fact
+    type: Integracion - Fact
 
-    ### EventoSuscripcionCancelada
-        type: Integracion - Fact
+**EventoSuscripcionPagada**
 
-    ### EventoSuscripcionPlanModificado
-        type: Integracion - Fact
+    type: Integracion - Fact
 
-    ### EventoSuscripcionPagada
-        type: Integracion - Fact
+## Microservicio procesamiento
 
-## microservicio procesamiento
+**Responsable**: Andrés Lombo
 
-- Responsable: Andrés Lombo
-- Documentación: [README](./microservicio-suscripciones/README.md)
-- Actividades: 
+**Documentación**: [README](./microservicio-suscripciones/README.md)
+
+**Actividades**: 
 
     [x] Definir la entidad raiz, entidades y objetos valor.
 
@@ -143,16 +160,16 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
 
     [x] Configurar Dockerfile y actualizar el docker-compose.
 
-- Comandos: 
+### Comandos: 
 
-    ### ComandoCrearSuscripcion:
-        
-        schema-type: AVRO
+**ComandoCrearSuscripcion:**
+    
+    schema-type: AVRO
 
-        Payload:
-    ```py
-            class ImagenAnonimizada(Entidad):
-                self.id_imagen = id_imagen
+    Payload:
+```py
+        class ImagenAnonimizada(Entidad):
+            self.id_imagen = id_imagen
             self.modalidad = modalidad
             self.patologia = patologia
             self.region_anatomica = region_anatomica
@@ -161,27 +178,28 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
             self.antecedentes = antecedentes
             self.id_paciente = id_paciente
             self.fecha_ingesta = fecha_ingesta
-    ```   
+```   
 
-- Queries:
+### Queries:
+
     ### ObtenerImagenAnonimizada
 
-- Eventos:
-    ### EventoAnonimizacion
-        type: Dominio
+### Eventos:
+**EventoAnonimizacion**
 
-    ### EventoConsultaAnonimizacion
-        type: Integración
+    type: Dominio
 
-## microservicio notificaciones
+**EventoConsultaAnonimizacion**
 
-[README](./microservicio-notificaciones/README.md)
+    type: Integración
 
-## microservicio servicios de datos
+## Microservicio servicios de datos
 
-- Responsable: Monica Muñoz
-- Documentación: [README](./microservicio-servicio-datos/README.md)
-- Actividades: 
+**Responsable**: Monica Muñoz
+
+**Documentación**: [README](./microservicio-servicio-datos/README.md)
+
+**Actividades**: 
 
     [x] Definir la entidad raiz, entidades y objetos valor.
 
@@ -201,81 +219,87 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
 
     [x] Configurar Dockerfile y actualizar el docker-compose.
 
-- Comandos: 
+### Comandos: 
 
-    ### ComandoCrearServicioDatos:
+**ComandoCrearServicioDatos:**
+    
+    schema-type: Cloud event + AVRO
+
+    version: v1
+
+    Payload:
+```py
+        class ComandoCrearServicioDatosPayload(ComandoIntegracion):
+            cliente_codigo = String()
+            cliente_nombres = String()
+            cliente_apellidos = String()
+            cliente_usuario = String()
+            plan_codigo = String()
+            plan_nombre = String()
+            experto_codigo = String()
+            experto_nombres = String()
+            experto_apellidos = String()
+            experto_usuario = String()
+            experto_cedula = String()
+            experto_email = String()
+            nube.codigo = String()
+            nube.nombre = String()
+            nube.tipo = string()
+            dataset.codigo = string()
+            dataset.nombre = string()
+            suscripcion.codigo = string()
+            
+```    
+**ComandoIniciarServicioDatos**
+    
+    Schema-type: Cloud event + AVRO
+
+    Version: v1
+
+    Payload: TBD
+
+**ComandoAsignarExperto:**
+    
+    Schema-type: Cloud event + AVRO
+
+    Version: v1
+
+    Payload: TBD
+
+**ComandoTerminarServicioDatos:**
+    
+    Schema-type: Cloud event + AVRO
+
+    Version: v1
+
+    Payload: TBD
         
-        schema-type: Cloud event + AVRO
+### Eventos: 
 
-        version: v1
+**EventoServicioDatosCreada**
 
-        Payload:
-    ```py
-            class ComandoCrearServicioDatosPayload(ComandoIntegracion):
-                cliente_codigo = String()
-                cliente_nombres = String()
-                cliente_apellidos = String()
-                cliente_usuario = String()
-                plan_codigo = String()
-                plan_nombre = String()
-                experto_codigo = String()
-                experto_nombres = String()
-                experto_apellidos = String()
-                experto_usuario = String()
-                experto_cedula = String()
-                experto_email = String()
-                nube.codigo = String()
-                nube.nombre = String()
-                nube.tipo = string()
-                dataset.codigo = string()
-                dataset.nombre = string()
-                suscripcion.codigo = string()
-                
-    ```    
-    ### ComandoIniciarServicioDatos
-        
-        Schema-type: Cloud event + AVRO
+    type: Integracion - Fact
 
-        Version: v1
+**EventoExpertoAsignado**
 
-        Payload: TBD
+    type: Integracion - Fact
 
-    ### ComandoAsignarExperto:
-        
-        Schema-type: Cloud event + AVRO
+**EventoServicioDatosIniciado**
 
-        Version: v1
+    type: Integracion - Fact
 
-        Payload: TBD
+**EventoServicioDatosTerminado**
 
-    ### ComandoTerminarServicioDatos:
-        
-        Schema-type: Cloud event + AVRO
-
-        Version: v1
-
-        Payload: TBD
-        
-- Eventos: 
-
-    ### EventoServicioDatosCreada
-        type: Integracion - Fact
-
-    ### EventoExpertoAsignado
-        type: Integracion - Fact
-
-    ### EventoServicioDatosIniciado
-        type: Integracion - Fact
-
-    ### EventoServicioDatosTerminado
-        type: Integracion - Fact
+    type: Integracion - Fact
 
 
 ## BFF WEB
 
-- Responsable: Humberto Maury
-- Documentación: [README](./bff_web/README.md)
-- Actividades: 
+**Responsable**: Humberto Maury
+
+**Documentación**: [README](./bff_web/README.md)
+
+**Actividades**: 
 
     [x] Crear endpoint comando crear suscripcion.
 
@@ -285,7 +309,7 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
     
     [x] Configurar Dockerfile y actualizar el docker-compose.
 
-- Endpoints: 
+### Endpoints: 
 
     **Endpoint**: `/suscripciones/suscripcion-comando`
 
@@ -318,81 +342,74 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
     }
     ```
 
-## Microservicio de notificaciones
-- Responsable: Luz Ochoa
+## Microservicio de Notificaciones
+
+**Responsable**: Luz Ochoa
 
 Este microservicio está diseñado para gestionar y enviar notificaciones basadas en eventos dentro de un sistema distribuido. Utiliza Apache Pulsar como sistema de mensajería para recibir eventos y generar notificaciones correspondientes.
 
-- Descripción
-El microservicio de Notificaciones escucha eventos desde un sistema de mensajería basado en Apache Pulsar y procesa estos eventos para generar notificaciones a los usuarios o realizar otras acciones específicas. Utiliza Flask como servidor web para exponer algunos endpoints, y procesa los eventos utilizando un consumidor en segundo plano.
+**Descripción**:
+
+El microservicio de Notificaciones escucha eventos desde un sistema de mensajería basado en Apache Pulsar y procesa estos eventos para generar notificaciones a los usuarios, procesa los eventos utilizando un consumidor en segundo plano.
 
 Este microservicio sigue un enfoque Event-driven, lo que significa que reacciona a los eventos generados en otros microservicios o sistemas, y no depende de consultas directas a bases de datos. En lugar de almacenar el estado de las notificaciones, se procesan eventos para cada acción, siguiendo el patrón de Event Sourcing.
 
-- Actividades del Microservicio
+**Actividades**: 
 
-### Recepción de eventos: 
+    [x] Suscribirse al topico de notificaciones.
+
+    [ ] procesar mensajes.
+
+    [x] Configurar Dockerfile y actualizar el docker-compose.
+
+
+### Funcionalidades:
+
+**Recepción de eventos:**
 El microservicio se suscribe a un tópico de eventos de Apache Pulsar (por ejemplo, suscripciones-topic).
 Escucha los mensajes que se publican en el tópico y procesa los eventos de suscripciones que llegan.
 
-### Generación de notificaciones:
+**Generación de notificaciones:**
 Cuando un evento de suscripción es recibido, el microservicio genera una notificación asociada a dicho evento.
 La notificación puede ser enviada a un sistema externo o almacenada internamente según los requisitos del sistema.
 
-### Almacenamiento de eventos:
+**Almacenamiento de eventos:**
 Los eventos de suscripción recibidos se almacenan en un Event Store.
 Este enfoque permite reconstruir el estado o realizar auditorías sin necesidad de una base de datos centralizada.
 
-### Publicación de mensajes:
+**Publicación de mensajes:**
 El microservicio puede generar eventos de salida (notificaciones procesadas) y publicarlos en un sistema de mensajería como Pulsar para otros servicios.
 
-### Consumo de mensajes en segundo plano:
+**Consumo de mensajes en segundo plano:**
 Los mensajes son procesados en un hilo separado para evitar que el servidor web de Flask se bloquee y para poder manejar múltiples eventos de manera concurrente.
 
-### Exposición de API REST:
-El microservicio expone endpoints HTTP a través de Flask para verificar el estado del servicio y manejar ciertos eventos de manera manual, si es necesario.
 
--  Eventos de microservicio
+### Eventos de microservicio
 
-### Evento de Notificación Creada: 
+**Evento de Notificación Creada:**
 Se emite cuando una notificación es generada en respuesta a un evento de suscripción.
 
-### Evento de Notificación Enviada: 
+**Evento de Notificación Enviada:**
 Se emite cuando la notificación ha sido enviada con éxito al usuario.
 
-### Evento de Error en el Procesamiento de Notificación: 
+**Evento de Error en el Procesamiento de Notificación:**
 Se emite cuando ocurre un error al procesar o enviar una notificación.
 
-### Evento de Confirmación de Notificación: 
+**Evento de Confirmación de Notificación:**
 Se emite como una confirmación de que la notificación fue procesada correctamente.
 
-- Endpoints 
 
-### GET /: Verifica si el microservicio está en ejecución.
-   # Respuestas:
-    {
-    "message": "Microservicio de notificaciones en ejecución"
-    }
+### Ejecución en docker-compose usando profiles
 
-### POST /notificaciones: Crea una notificación a partir de los eventos recibidos.
-# Cuerpo de la solicitud (JSON):
-    {
-        "id_suscripcion": "12345",
-        "mensaje": "Tu suscripción se ha creado exitosamente."
-    }
-
-### POST /suscripcion-comando: Endpoint para recibir un comando de suscripción y crear una notificación basada en ello.
-# Cuerpo de la solicitud (JSON):
-    {
-    "id_suscripcion": "67890",
-    "cliente": "Juan Pérez",
-    "plan": "Premium"
-    }
-
-
-
-### Correr docker-compose usando profiles
 ```bash
 docker-compose --profile pulsar --profile suscripciones --profile procesamiento --profile bff_web up --profile notificaciones --profile serviciodatos up -d --build
 ```
 
+### Despliegue en GCP: 
 
+**URL BFF WEB:**
+http://34.136.120.7:5005
+
+### Colección de postman para pruebas:
+
+[Postman file](byteBros-saludTechAlpes.postman_collection.json)

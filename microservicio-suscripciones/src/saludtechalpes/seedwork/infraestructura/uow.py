@@ -68,9 +68,7 @@ class UnidadTrabajo(ABC):
             dispatcher.send(signal=f'{type(evento).__name__}Dominio', evento=evento)
 
     def _publicar_eventos_post_commit(self):
-        print("############## _publicar_eventos_post_commit")
         for evento in self._obtener_eventos():
-            print(f'############## {type(evento).__name__}Integracion')
             dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)
 
 def is_flask():

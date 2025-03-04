@@ -15,12 +15,8 @@ from saludtechalpes.modulos.suscripciones.aplicacion.mapeadores import MapeadorS
 def suscribirse_a_eventos():
     cliente = None
     try:
-        print(f'########## suscribirse_a_eventos')
-
         cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
         consumidor = cliente.subscribe('eventos-suscripcion', consumer_type=_pulsar.ConsumerType.Shared,subscription_name='saludtechalpes-sub-eventos', schema=AvroSchema(EventoSuscripcionCreada))
-        
-        print(f'########## Esperando eventos')
 
         while True:
             mensaje = consumidor.receive()
@@ -38,7 +34,7 @@ def suscribirse_a_comandos(app=None):
     cliente = None
     try:
         cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
-        consumidor = cliente.subscribe('comandos-suscripcion', consumer_type=_pulsar.ConsumerType.Shared, subscription_name='saludtechalpes-sub-comandos', schema=AvroSchema(ComandoCrearSuscripcion))
+        consumidor = cliente.subscribe('comandos-crear-suscripcion', consumer_type=_pulsar.ConsumerType.Shared, subscription_name='saludtechalpes-sub-comandos', schema=AvroSchema(ComandoCrearSuscripcion))
 
         while True:
             mensaje = consumidor.receive()

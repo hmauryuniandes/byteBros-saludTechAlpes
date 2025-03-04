@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "17a98965-51fe-44ca-9f30-46e516adeb58",
+		"name": "byteBros-saludTechAlpes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30639167",
+		"_collection_link": "https://www.postman.com/devopsmhf/workspace/bytebros-saludtechalpes/collection/34047517-17a98965-51fe-44ca-9f30-46e516adeb58?action=share&source=collection_link&creator=30639167"
+	},
+	"item": [
+		{
+			"name": "Crear suscripcion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cliente\": {\r\n            \"codigo\": \"0001\",\r\n            \"nombre\": {\r\n                \"nombres\": \"Pablo\",\r\n                \"apellidos\": \"Perez Prieto\"\r\n            },\r\n            \"usuario\": \"pperez\",\r\n            \"rut\": {\r\n                \"numero\": 123457890\r\n            },\r\n            \"cedula\": {\r\n                \"numero\": 123457890\r\n            },\r\n            \"email\": \"pperez@domain.com\"\r\n    },\r\n    \"plan\": {\r\n            \"codigo\": \"pro\",\r\n            \"nombre\": \"PRO\"\r\n    },\r\n    \"facturas\": []\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{bff}}/suscripciones/suscripcion-comando"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear servicio de datos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"suscripcion\": {\r\n       \"codigo\": \"0002\",\r\n       \"cliente\": {\r\n        \"codigo\": \"0002\",\r\n        \"nombre\": {\r\n            \"nombres\": \"Pablo\",\r\n            \"apellidos\": \"Perez Prieto\"\r\n        },\r\n        \"usuario\": \"pperez\"\r\n    },\r\n    \"plan\": {\r\n        \"codigo\": \"pro\",\r\n        \"nombre\": \"PRO\"\r\n    }\r\n   },\r\n   \"experto\": {\r\n        \"codigo\": \"0001\",\r\n        \"nombre\": {\r\n            \"nombres\": \"Pablo\",\r\n            \"apellidos\": \"Perez Prieto\"\r\n        },\r\n        \"usuario\": \"pperez\",\r\n        \"cedula\": {\r\n            \"numero\": 22222222\r\n        },\r\n        \"email\": \"pperez@domain.com\"\r\n   },\r\n   \"nube\": {\r\n        \"codigo\": \"pro\",\r\n        \"nombre\": \"PRO\"\r\n   },\r\n   \"dataset\": {\r\n       \"codigo\": \"0001\",\r\n       \"nombre\": \"DatasetCliente001\"\r\n   },\r\n   \"id\": 123\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{servicio_datos}}/serviciodatos/serviciodatos-comando"
+			},
+			"response": []
+		},
+		{
+			"name": "Anonimizar imagen",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_imagen\": \"46769a88-581f-4468-8a14-15f715887d01\",\r\n    \"modalidad\": \"Rayos X\",\r\n    \"patologia\": \"Neumonía\",\r\n    \"region_anatomica\": \"Cráneo\",\r\n    \"formato_imagen\": \"DICOM\",\r\n    \"fuente_de_datos\": \"Hospital del norte\",\r\n    \"antecedentes\": \"Diabético\",\r\n    \"id_paciente\" : \"46769a88-181f-4468-8i34-15f750381d01\",\r\n    \"fecha_ingesta\": \"2024-02-01 09:10:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{prosesamiento}}/anonimizar"
+			},
+			"response": []
+		},
+		{
+			"name": "Genera notificacion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{notificaciones}}/"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bff",
+			"value": "http://34.136.120.7:5005",
+			"type": "string"
+		},
+		{
+			"key": "servicio_datos",
+			"value": "http://34.136.120.7:5001",
+			"type": "string"
+		},
+		{
+			"key": "notificaciones",
+			"value": "http://34.136.120.7:5003",
+			"type": "string"
+		},
+		{
+			"key": "prosesamiento",
+			"value": "http://34.136.120.7:5002\n",
+			"type": "string"
+		}
+	]
+}
