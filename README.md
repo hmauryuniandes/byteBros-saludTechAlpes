@@ -29,7 +29,7 @@ El sistemadebepermitirmodificacionesy extensibilidadenelprocesode suscripción, 
 
 - Los microservicios con bases de datos son: suscripciones, procesamiento y servicio de datos.
 
-- Administración de datos desentralizada: La administración de bases de datos descentralizada se implementará debido a su capacidad para mejorar la escalabilidad, el rendimiento y la resiliencia del sistema. Al permitir que cada microservicio gestione su propia base de datos, se evita el acoplamiento, lo que facilita el desarrollo independiente y reduce los cuellos de botella. Además, se mejora la seguridad, ya que cada equipo puede gestionar accesos y permisos de forma autónoma. Aunque esto implica una mayor complejidad en la gestión de datos y transacciones, la base de datos descentralizada se alinea con las decisiones tomadas sobre el uso de comandos y eventos.
+- Administración de datos descentralizada: La administración de bases de datos descentralizada se implementará debido a su capacidad para mejorar la escalabilidad, el rendimiento y la resiliencia del sistema. Al permitir que cada microservicio gestione su propia base de datos, se evita el acoplamiento, lo que facilita el desarrollo independiente y reduce los cuellos de botella. Además, se mejora la seguridad, ya que cada equipo puede gestionar accesos y permisos de forma autónoma. Aunque esto implica una mayor complejidad en la gestión de datos y transacciones, la base de datos descentralizada se alinea con las decisiones tomadas sobre el uso de comandos y eventos.
 
 - Patrón de almacenamiento: los microservicios con base de datos se usará el módelo CRUD y para el microservicio de notificacicones Event sourcing.
 
