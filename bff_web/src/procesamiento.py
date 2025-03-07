@@ -21,7 +21,7 @@ def publicar_mensaje(mensaje, topico):
     try:
         mensaje_json = json.dumps(mensaje).encode('utf-8')
         publicador.send(mensaje_json)
-        print(f"✅ Mensaje enviado a {topico}: {mensaje}")
+        print(f"✅ Mensaje enviado a /procesamiento/{topico}: {mensaje}")
     except Exception as e:
         print(f"❌ Error enviando mensaje: {e}")
     finally:
