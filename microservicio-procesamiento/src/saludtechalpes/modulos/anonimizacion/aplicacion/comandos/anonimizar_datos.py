@@ -15,18 +15,24 @@ class Anonimizador:
 
     def ejecutar(self, datos_imagen: dict):
         print(f'🔍 Procesando imagen con datos: {datos_imagen}')
+        fecha_ingesta_str = datos_imagen.get("fecha_ingesta", None)
+        if fecha_ingesta_str:
+            fecha_ingesta = datetime.strptime(fecha_ingesta_str, "%Y-%m-%d %H:%M:%S").year
+        else:
+            fecha_ingesta = datetime.now()
 
         imagen = ImagenAnonimizada(
             id_imagen=datos_imagen["id_imagen"],
-            modalidad=datos_imagen["modalidad"],
+            modalidad=datos_imagen.get("modalidad", "Desconocida"),
             patologia=datos_imagen.get("patologia", "Desconocido"),
             region_anatomica=datos_imagen.get("region_anatomica", "No especificada"),
-            formato_imagen=datos_imagen["formato_imagen"],
+            formato_imagen=datos_imagen.get("formato_imagen"),
             fuente_de_datos="***ANONIMIZADO***",
             antecedentes="***ANONIMIZADO***",
             id_paciente=str(uuid.uuid4()),
-            fecha_ingesta=datetime.strptime(datos_imagen["fecha_ingesta"], "%Y-%m-%d %H:%M:%S").year
+            fecha_ingesta=fecha_ingesta
         )
+
 
         with self.uow.iniciar() as session:
             nuevo_id = self.repositorio.guardar(imagen)

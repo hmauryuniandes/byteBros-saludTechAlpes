@@ -10,14 +10,15 @@ class RepositorioImagenesSQL(Repositorio):
     def __init__(self):
         self.db: Session = SessionLocal()
 
-    def obtener_por_id(self, id):
-        """Obtiene una imagen anonimizada por ID y la convierte en un diccionario"""
-        db_datos = self.db.query(DatosAnonimizadosDB).filter_by(id=id).first()
+    def obtener_por_id(self, id_imagen):
+        """Obtiene una imagen anonimizada por ID de imagen y la convierte en un diccionario"""
+        db_datos = self.db.query(DatosAnonimizadosDB).filter_by(id_imagen=id_imagen).first()
 
         if db_datos:
             return {column.name: getattr(db_datos, column.name) for column in db_datos.__table__.columns}  # 🔥 Convierte a dict limpio
         
         return None
+
     def guardar(self, imagen):
         print(f'💾 Guardando en DB: {imagen}')
 

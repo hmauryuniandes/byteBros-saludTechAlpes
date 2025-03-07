@@ -1,6 +1,9 @@
 import threading
+import json
+from flask import jsonify
 from pulsar import Client, ConsumerType
 from src.saludtechalpes.modulos.anonimizacion.infraestructura.repositorios import RepositorioImagenesSQL
+from src.saludtechalpes.modulos.anonimizacion.aplicacion.comandos.anonimizar_datos import Anonimizador
 
 class ConsumidorEventosPulsar:
     def __init__(self):
@@ -17,21 +20,21 @@ class ConsumidorEventosPulsar:
         self.repositorio = RepositorioImagenesSQL()
 
     def consumir_anonimizacion(self):
-        """Consume eventos de anonimización"""
+        """Consume eventos de anonimización y los guarda en la base de datos"""
+        anonimizador = Anonimizador()  # Instancia de la clase para guardar los datos
+
         while True:
             mensaje = self.consumidor_anonimizacion.receive()
-            id_datos = mensaje.data().decode("utf-8")
-            print(f'📩 Evento de ANONIMIZACIÓN recibido para ID: {id_datos}')
+            datos = json.loads(mensaje.data().decode("utf-8"))  # Convertir JSON a diccionario
 
-            resultado = self.repositorio.obtener_por_id(id_datos)
+            print(f'📩 Evento de ANONIMIZACIÓN recibido para ID: {datos["id_imagen"]}')
 
-            if resultado:
-                print("✅ Datos Anonimizados Guardados:")
-                print(resultado)
-            else:
-                print(f'❌ No se encontraron datos para ID {id_datos}')
-
-            self.consumidor_anonimizacion.acknowledge(mensaje)
+            try:
+                resultado = anonimizador.ejecutar(datos)  # Guardar en la BD
+                print(f"✅ Imagen Anonimizada Guardada: {resultado}")
+                self.consumidor_anonimizacion.acknowledge(mensaje)  # Confirmar mensaje
+            except Exception as e:
+                print(f"❌ Error guardando en BD: {e}")
 
     def consumir_consulta(self):
         """Consume eventos de consulta de datos anonimizados"""
@@ -57,4 +60,5 @@ def iniciar_consumidor():
 
     hilo_anonimizacion.start()
     hilo_consulta.start()
-    print("HILOS INICIADOS")
+    print("Consumidor iniciado, revisa los logs para ver los eventos")
+    #return jsonify({"mensaje": "Consumidor iniciado, revisa los logs para ver los eventos"})
