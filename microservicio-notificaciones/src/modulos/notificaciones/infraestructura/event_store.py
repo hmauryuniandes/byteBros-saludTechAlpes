@@ -1,18 +1,9 @@
-import json
-
 class EventStore:
-    def __init__(self, filename="event_store.json"):
-        self.filename = filename
-    
-    def save_event(self, event):
-        # Guardamos el evento en un archivo JSON
-        with open(self.filename, 'a') as file:
-            file.write(json.dumps(event) + "\n")
-    
-    def get_all_events(self):
-        # Recuperamos todos los eventos almacenados
-        events = []
-        with open(self.filename, 'r') as file:
-            for line in file:
-                events.append(json.loads(line.strip()))
-        return events
+    def __init__(self):
+        # En este caso, utilizaremos una lista en memoria para guardar los eventos
+        self.eventos = []
+
+    def save_event(self, evento):
+        # Guarda el evento en la lista (o en una base de datos)
+        self.eventos.append(evento)
+        print(f"Evento guardado: {evento}")
