@@ -11,4 +11,3 @@ COPY . .
 ENV FLASK_APP=src.saludtechalpes.run
 
 CMD ["python", "-m", "src.saludtechalpes.run"]
-

@@ -15,7 +15,7 @@ class DatosAnonimizadosDB(Base):
     __tablename__ = "datos_anonimizados"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    id_imagen = Column(String, nullable=False, unique=True)
+    id_imagen = Column(String, nullable=False)
     modalidad = Column(String, nullable=False)
     patologia = Column(String, nullable=True)
     region_anatomica = Column(String, nullable=True)

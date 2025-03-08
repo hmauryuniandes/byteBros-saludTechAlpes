@@ -1,3 +1,4 @@
+import json
 from pulsar import Client
 from src.saludtechalpes.modulos.anonimizacion.dominio.eventos import EventoAnonimizacion, EventoConsultaAnonimizacion
 
@@ -9,15 +10,13 @@ class DespachadorEventosPulsar:
         self.productor_consulta = self.cliente.create_producer('consulta_anonimizacion')
 
     def despachar(self, evento):
-        if isinstance(evento, EventoAnonimizacion):
-            print(f"📩 Enviando evento de anonimización a Pulsar: {evento.id_datos}")
-            self.productor_anonimizacion.send(evento.id_datos.encode('utf-8'))
-            print("✅ Mensaje enviado correctamente a Pulsar")
-
-
-        elif isinstance(evento, EventoConsultaAnonimizacion):
-            print(f"🔍 Enviando evento de consulta a Pulsar: {evento.id_datos}")
-            self.productor_consulta.send(evento.id_datos.encode('utf-8'))
-
+        if isinstance(evento, dict):  # Si ya es un diccionario, está bien
+            evento_serializado = json.dumps(evento).encode("utf-8")
+        elif hasattr(evento, "serializar"):  # Si tiene serialización, úsala
+            evento_serializado = evento.serializar()
         else:
             print("⚠️ Evento desconocido, no se enviará a Pulsar")
+            return
+
+        print(f"📩 Enviando evento serializado: {evento_serializado}")
+        self.pulsar_producer.send(evento_serializado)
