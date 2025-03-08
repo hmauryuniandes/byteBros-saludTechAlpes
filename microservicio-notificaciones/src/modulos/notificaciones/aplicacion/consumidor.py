@@ -1,5 +1,6 @@
 from src.modulos.notificaciones.infraestructura.pulsar_client import PulsarClient
 from src.modulos.notificaciones.aplicacion.event_processor import EventProcessor
+from src.modulos.notificaciones.aplicacion.notificacion import enviar_notificacion
 
 class Consumidor:
     def __init__(self, pulsar_client, topic, subscription_name, event_store):
@@ -13,6 +14,10 @@ class Consumidor:
                 print(f"Recibido mensaje: '{msg.data()}'")
                 # Procesar el mensaje (evento)
                 event = msg.data().decode('utf-8')
+
+                if event == "ProcesoFinalizado":
+                    enviar_notificacion("La transacción ha sido finalizada exitosamente.") 
+
                 self.event_processor.procesar_evento(event)
                 self.consumer.acknowledge(msg)
             except Exception as e:
