@@ -417,6 +417,10 @@ Aquí va el documento con los resultados.
 ### EXPERIMENTO #1: Escalabilidad con Concurrencia (Load Balancer)
 
 **Construcción del experimento:**
+
+Escenario de calidad, experimento 1:
+![alt text](./imgs_readme/{108F04B9-A607-47CE-B91A-C5323BF5F9C2}.png)
+
 Se creó el grupo de contenedores en GCP, un grupo de mínimo 1, máximo 3, como regla que al alcanzar el 75% de capacidad de CPU, se redirigiera a otra instancia.
 Para éste grupo de instancias, se usaba una plantilla de instancia con las instrucciones para correr el proyecto.
 
