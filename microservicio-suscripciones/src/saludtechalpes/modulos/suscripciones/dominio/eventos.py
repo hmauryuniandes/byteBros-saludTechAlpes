@@ -10,3 +10,10 @@ class SuscripcionCreada(EventoDominio):
     codigo_cliente: str = None
     codigo_plan: str = None
     
+@dataclass
+class SuscripcionFallida(EventoDominio):
+    id_suscripcion: uuid.UUID = None
+
+@dataclass
+class SuscripcionEliminada(EventoDominio):
+    id_suscripcion: uuid.UUID = None

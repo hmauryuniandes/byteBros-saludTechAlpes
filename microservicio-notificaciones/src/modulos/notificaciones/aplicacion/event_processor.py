@@ -9,5 +9,6 @@ class EventProcessor:
         # Persistir el evento
         self.event_store.save_event({"evento": event})
         
-        # Acción a realizar con el evento (enviar notificación)
-        enviar_notificacion(event)
+       # Solo enviar notificación si el evento es de tipo "ProcesoFinalizado"
+        if event == "ProcesoFinalizado":
+            enviar_notificacion("La transacción ha sido finalizada exitosamente.")

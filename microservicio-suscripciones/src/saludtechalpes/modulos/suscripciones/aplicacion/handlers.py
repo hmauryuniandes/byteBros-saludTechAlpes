@@ -6,5 +6,14 @@ class HandlerSuscripcionIntegracion(Handler):
     @staticmethod
     def handle_suscripcion_creada(evento):
         despachador = Despachador()
-        despachador.publicar_evento(evento, 'eventos-suscripcion')
+        despachador.publicar_evento(evento, 'eventos-suscripcion-creada')
     
+    @staticmethod
+    def handle_suscripcion_fallida(evento):
+        despachador = Despachador()
+        despachador.publicar_evento(evento, 'eventos-suscripcion-fallida')
+
+    @staticmethod
+    def handle_suscripcion_eliminada(evento):
+        despachador = Despachador()
+        despachador.publicar_evento(evento, 'eventos-suscripcion-eliminada')

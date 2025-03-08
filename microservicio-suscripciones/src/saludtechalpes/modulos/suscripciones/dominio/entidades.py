@@ -4,7 +4,7 @@ En este archivo usted encontrará las entidades del dominio de suscripcion
 
 """
 
-from saludtechalpes.modulos.suscripciones.dominio.eventos import SuscripcionCreada
+from saludtechalpes.modulos.suscripciones.dominio.eventos import SuscripcionCreada, SuscripcionEliminada
 from saludtechalpes.seedwork.dominio.entidades import AgregacionRaiz, Entidad
 from dataclasses import dataclass, field
 from .objetos_valor import Codigo, Estado, Fecha, Nombre, Email, Cedula, NombrePlan, Rut, MedioPago, Usuario, ValorMoneda
@@ -47,6 +47,9 @@ class Suscripcion(AgregacionRaiz):
         self.facturas = suscripcion.plan
         self.estado = 'Activo'
 
-        self.agregar_evento(SuscripcionCreada(codigo_plan=self.plan.codigo, codigo_cliente=self.cliente.codigo, id_suscripcion=self.id))
+        self.agregar_evento(SuscripcionCreada(codigo_plan=self.plan.codigo.valor, codigo_cliente=self.cliente.codigo.valor, id_suscripcion=self.id))
+
+    def eliminar_suscripcion(self):
+        self.agregar_evento(SuscripcionEliminada(id_suscripcion=self.id))
 
 

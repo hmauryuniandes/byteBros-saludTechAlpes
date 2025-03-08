@@ -1,25 +1,25 @@
 from saludtechalpes.seedwork.aplicacion.dto import Mapeador as AppMap
 from saludtechalpes.seedwork.dominio.repositorios import Mapeador as RepMap
 from saludtechalpes.modulos.suscripciones.dominio.entidades import Factura, Plan, Suscripcion, Cliente
-from saludtechalpes.modulos.suscripciones.dominio.objetos_valor import Codigo, Email, Nombre, MedioPago, NombrePlan, Rut, Usuario
+from saludtechalpes.modulos.suscripciones.dominio.objetos_valor import Cedula, Codigo, Email, Nombre, MedioPago, NombrePlan, Rut, Usuario
 from .dto import ClienteDTO, FacturaDTO, PagoDTO, PlanDTO, SuscripcionDTO
 
 from datetime import datetime
 
 class MapeadorSuscripcionDTOJson(AppMap):
     def _procesar_cliente(self, cliente: dict) -> ClienteDTO:
-        codigo = cliente.get('codigo')
-        nombre = cliente.get('nombre')
-        usuario = cliente.get('usuario')
-        rut = cliente.get('rut')
-        cedula = cliente.get('cedula')
-        email = cliente.get('email')
+        codigo = str(cliente.get('cliente_codigo'))
+        nombre = Nombre(nombres=cliente.get('cliente_nombres'), apellidos=cliente.get('cliente_apellidos')).__dict__
+        usuario = str(cliente.get('cliente_usuario'))
+        rut = Rut(numero=cliente.get('cliente_rut')).__dict__
+        cedula = Cedula(numero=cliente.get('cliente_cedula')).__dict__
+        email = str(cliente.get('cliente_email'))
 
         return ClienteDTO(codigo, nombre, usuario, rut, cedula, email)
     
-    def _procesar_plan(self, factura: dict) -> PlanDTO:
-        codigo = factura.get('codigo')
-        nombre = factura.get('nombre')
+    def _procesar_plan(self, plan: dict) -> PlanDTO:
+        codigo = plan.get('plan_codigo')
+        nombre = plan.get('plan_nombre')
 
         return PlanDTO(codigo, nombre)
     
@@ -42,18 +42,14 @@ class MapeadorSuscripcionDTOJson(AppMap):
         return factura_dto
     
     def externo_a_dto(self, externo: dict) -> SuscripcionDTO:
-        cliente = self._procesar_cliente(externo.get('cliente'))
-        plan = self._procesar_plan(externo.get('plan'))
+        cliente = self._procesar_cliente(externo)
+        plan = self._procesar_plan(externo)
 
-
-        # TODO
-        # suscripcion_dto.facturas = list()
-        # for factura in externo.get('facturas', list()):
-        #     suscripcion_dto.facturas.append(self._procesar_factura(factura))
 
         return SuscripcionDTO(cliente=cliente, plan=plan)
 
     def dto_a_externo(self, dto: SuscripcionDTO) -> dict:
+        # TODO convertir a json con la estructura del schema
         return dto.__dict__
 
 class MapeadorSuscripcion(RepMap):
@@ -105,10 +101,6 @@ class MapeadorSuscripcion(RepMap):
         cliente = self._procesar_cliente(dto.cliente)
         plan = self._procesar_plan(dto.plan)
        
-
-        #TODO
-        # suscripcion.facturas = list()
-
         return Suscripcion(cliente=cliente, plan=plan, estado=dto.estado)
 
 
