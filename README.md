@@ -469,16 +469,23 @@ Body:
 ![alt text](imgs_readme\image-6.png)
 
 1.El sistema es capaz de distribuir las solicitudes entre las instancias disponibles, sin que ninguna supere el 75% de su capacidad.
+ 
+2.La hipótesis se cumplió gracias a la aplicación del patrón del load balancer, la escalabilidad dinámica, la arquitectura utlizando mensajería asincrónica por medio de apache pulsar entre el bff y el ms de procesamiento, además da la táctica de Monitor la cuál le permitieron al sistema identificar con rapidez las instancias que presentaban errores y retirarlas de la operación del sistema. Debido al desacoplamiento del microservicio de procesamiento pudo escalar de manera independiente, escuchando los eventos del bff para que cuando se disparara un comando, ejecutara el evento.
 
-2. La hipótesis se cumplió gracias a la aplicación del patrón del load balancer, la escalabilidad dinámica, la arquitectura utlizando mensajería asincrónica por medio de apache pulsar entre el bff y el ms de procesamiento, además da la táctica de Monitor la cuál le permitieron al sistema identificar con rapidez las instancias que presentaban errores y retirarlas de la operación del sistema. Debido al desacoplamiento del microservicio de procesamiento pudo escalar de manera independiente, escuchando los eventos del bff para que cuando se disparara un comando, ejecutara el evento.
+Se obtuvieron los siguientes resultados:
 
-Se obtuvieron los siguientes resultados: 
 Buen rendimiento: Tiempo de respuesta promedio de 228 ms, lo cual es rápido (menos de 2 segundos).
+
 Baja latencia mínima (90 ms), lo que indica que el servidor puede manejar respuestas rápidas en algunos casos.
+
 Sin errores (0.00%), lo que significa que todas las solicitudes fueron exitosas.
+
 Tiempo máximo de 1,350 ms: Aunque el promedio es bajo, algunas solicitudes tardaron más de 1 segundo. Puede ser una señal de sobrecarga en momentos puntuales.
+
 Desviación estándar de 179.42 ms, lo que indica cierta variabilidad en los tiempos de respuesta.
+
 Ninguna instancia supera el 75% de uso, lo máximo que alcanza una instancia es el 49% de uso de CPU.
+
 Para consultar detalles de los resultados consulte el DOCUMENTO DE RESULTADOS DE EXPERIMENTOS.
 
 ### Colección de postman para pruebas:
