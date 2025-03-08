@@ -410,6 +410,72 @@ docker-compose --profile pulsar --profile suscripciones --profile procesamiento 
 **URL BFF WEB:**
 http://34.136.120.7:5005
 
+### DOCUMENTO DE RESULTADOS DE EXPERIMENTOS
+
+Aquí va el documento con los resultados.
+
+### EXPERIMENTO #1: Escalabilidad con Concurrencia (Load Balancer)
+
+**Construcción del experimento:**
+Se creó el grupo de contenedores en GCP, un grupo de mínimo 1, máximo 3, como regla que al alcanzar el 75% de capacidad de CPU, se redirigiera a otra instancia.
+Para éste grupo de instancias, se usaba una plantilla de instancia con las instrucciones para correr el proyecto.
+
+![alt text](imgs_readme\{AD278B78-90D2-4831-8753-A493979A6AA8}.png)
+
+Luego se construyó el balanceador de carga:
+![alt text](imgs_readme\image.png)
+
+Se configura el JMeter:
+Propiedades del Hilo:
+
+Número de Hilos: 1000
+→ Simula 1000 usuarios virtuales concurrentes en la prueba.
+Periodo de Subida (Ramp-Up Period) en segundos: 60
+→ Los 1000 hilos se iniciarán en 60 segundos, es decir, JMeter agregará aproximadamente 16-17 usuarios por segundo hasta alcanzar los 1000.
+Contador del Bucle: 4
+→ Cada hilo ejecutará 4 iteraciones antes de finalizar. Si estuviera en "Sin fin", se ejecutaría de manera indefinida.
+
+Posible impacto:
+Esta configuración genera una carga muy alta en un tiempo relativamente corto (60s). Si el sistema no está bien preparado, podría colapsar debido al número de solicitudes simultáneas.
+
+![alt text](imgs_readme\image-1.png)
+
+
+Después se configura el JMeter con la dirección del balanceador de carga:
+**http://34.54.118.91:80**
+Utilizando el endpoint del BFF: '/procesar/procesar-imagen', methods=['POST']
+Header:
+Content-Type = json/application
+Body:
+```json
+{
+    "id_imagen": "46769a88-00000-4468o-8a14-1579887d01",
+    "modalidad": "Rayos X",
+    "patologia": "Neumonía",
+    "region_anatomica": "Cráneo",
+    "formato_imagen": "DICOM",
+    "fuente_de_datos": "Hospital del norte",
+    "antecedentes": "Diabético",
+    "id_paciente" : "46769a88-181f-4468-8i34-15f750381d01",
+    "fecha_ingesta": "2024-02-01 09:10:00"
+}
+```
+![alt text](imgs_readme\image-2.png)
+
+### Resultados Experimento 1.
+![alt text](imgs_readme\image-3.png)
+![alt text](imgs_readme\image-4.png)
+![alt text](imgs_readme\image-5.png)
+![alt text](imgs_readme\image-6.png)
+
+1.El sistema es capaz de distribuir las solicitudes entre las instancias disponibles, sin que ninguna supere el 75% de su capacidad.
+2. La hipótesis se cumplió gracias a la aplicación del patrón del load balancer, la escalabilidad dinámica, la arquitectura utlizando mensajería asincrónica por medio de apache pulsar entre el bff y el ms de procesamiento, además da la táctica de Monitor la cuál le permitieron al sistema identificar con rapidez las instancias que presentaban errores y retirarlas de la operación del sistema. Debido al desacoplamiento del microservicio de procesamiento pudo escalar de manera independiente, escuchando los eventos del bff para que cuando se disparara un comando, ejecutara el evento.Se obtuvieron los siguientes resultados:Buen rendimiento: Tiempo de respuesta promedio de 228 ms, lo cual es rápido (menos de 2 segundos).
+Baja latencia mínima (90 ms), lo que indica que el servidor puede manejar respuestas rápidas en algunos casos.
+Sin errores (0.00%), lo que significa que todas las solicitudes fueron exitosas.
+Tiempo máximo de 1,350 ms: Aunque el promedio es bajo, algunas solicitudes tardaron más de 1 segundo. Puede ser una señal de sobrecarga en momentos puntuales.
+Desviación estándar de 179.42 ms, lo que indica cierta variabilidad en los tiempos de respuesta.Ninguna instancia supera el 75% de uso, lo máximo que alcanza una instancia es el 49% de uso de CPU.
+Para consultar detalles de los resultados consulte el DOCUMENTO DE RESULTADOS DE EXPERIMENTOS.
+
 ### Colección de postman para pruebas:
 
 [Postman file](byteBros-saludTechAlpes.postman_collection.json)
