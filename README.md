@@ -426,16 +426,23 @@ Luego se construyó el balanceador de carga:
 ![alt text](./imgs_readme/image.png)
 
 Se configura el JMeter:
+
 Propiedades del Hilo:
 
 Número de Hilos: 1000
+
 → Simula 1000 usuarios virtuales concurrentes en la prueba.
+
 Periodo de Subida (Ramp-Up Period) en segundos: 60
+
 → Los 1000 hilos se iniciarán en 60 segundos, es decir, JMeter agregará aproximadamente 16-17 usuarios por segundo hasta alcanzar los 1000.
+
 Contador del Bucle: 4
+
 → Cada hilo ejecutará 4 iteraciones antes de finalizar. Si estuviera en "Sin fin", se ejecutaría de manera indefinida.
 
 Posible impacto:
+
 Esta configuración genera una carga muy alta en un tiempo relativamente corto (60s). Si el sistema no está bien preparado, podría colapsar debido al número de solicitudes simultáneas.
 
 ![alt text](./imgs_readme/image-1.png)
@@ -443,10 +450,15 @@ Esta configuración genera una carga muy alta en un tiempo relativamente corto (
 
 Después se configura el JMeter con la dirección del balanceador de carga:
 **http://34.54.118.91:80**
+
 Utilizando el endpoint del BFF: '/procesar/procesar-imagen', methods=['POST']
+
 Header:
+
 Content-Type = json/application
+
 Body:
+
 ```json
 {
     "id_imagen": "46769a88-00000-4468o-8a14-1579887d01",
