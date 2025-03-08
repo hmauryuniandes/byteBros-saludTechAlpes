@@ -1,5 +1,5 @@
 from saludtechalpes.seedwork.aplicacion.handlers import Handler
-from saludtechalpes.modulos.suscripciones.infraestructura.despachadores import Despachador
+from saludtechalpes.modulos.sagas.infraestructura.despachadores import Despachador
 
 class HandlerSuscripcionComandos(Handler):
 
