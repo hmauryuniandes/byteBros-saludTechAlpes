@@ -25,9 +25,11 @@ class ConsumidorEventosPulsar:
 
         while True:
             mensaje = self.consumidor_anonimizacion.receive()
+            print(f"📩 Mensaje recibido: {mensaje.data().decode('utf-8')}")
+
             datos = json.loads(mensaje.data().decode("utf-8"))  # Convertir JSON a diccionario
 
-            print(f'📩 Evento de ANONIMIZACIÓN recibido para ID: {datos["id_imagen"]}')
+            ##print(f'📩 Evento de ANONIMIZACIÓN recibido para ID: {datos["id_imagen"]}')
 
             try:
                 resultado = anonimizador.ejecutar(datos)  # Guardar en la BD

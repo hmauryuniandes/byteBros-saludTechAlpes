@@ -38,7 +38,10 @@ class Anonimizador:
             nuevo_id = self.repositorio.guardar(imagen)
             self.uow.confirmar()
 
-        evento = EventoAnonimizacion(nuevo_id)
-        self.despachador.despachar(evento)
+        evento = EventoAnonimizacion({"id": nuevo_id})
+        evento_serializado = evento.serializar()  # Convertir a JSON antes de enviar
+
+
+        #self.despachador.despachar(evento_serializado)
 
         return {"id": nuevo_id, "datos_procesados": imagen.__dict__}
