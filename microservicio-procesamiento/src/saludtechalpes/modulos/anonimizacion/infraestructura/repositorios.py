@@ -22,7 +22,7 @@ class RepositorioImagenesSQL(Repositorio):
     def guardar(self, imagen):
         print(f'💾 Guardando en DB: {imagen}')
 
-        stmt = insert(DatosAnonimizadosDB).values(
+        nuevo_registro = DatosAnonimizadosDB(
             id_imagen=imagen.id_imagen,
             modalidad=imagen.modalidad,
             patologia=imagen.patologia,
@@ -32,26 +32,14 @@ class RepositorioImagenesSQL(Repositorio):
             antecedentes=imagen.antecedentes,
             id_paciente=imagen.id_paciente,
             fecha_ingesta=imagen.fecha_ingesta
-        ).on_conflict_do_update(
-            index_elements=["id_imagen"],
-            set_={
-                "modalidad": imagen.modalidad,
-                "patologia": imagen.patologia,
-                "region_anatomica": imagen.region_anatomica,
-                "formato_imagen": imagen.formato_imagen,
-                "fuente_de_datos": imagen.fuente_de_datos,
-                "antecedentes": imagen.antecedentes,
-                "id_paciente": imagen.id_paciente,
-                "fecha_ingesta": imagen.fecha_ingesta
-            }
         )
 
         try:
-            result = self.db.execute(stmt)
+            self.db.add(nuevo_registro)  # Insertar directamente
             self.db.commit()
-            return result.inserted_primary_key[0] if result.inserted_primary_key else None
+            return nuevo_registro.id  # Devuelve el ID autoincremental
         except IntegrityError as e:
             self.db.rollback()
-            print(f'Error al insertar en DB: {e}')
+            print(f'❌ Error al insertar en DB: {e}')
             return None
 
