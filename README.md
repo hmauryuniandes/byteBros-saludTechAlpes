@@ -438,7 +438,7 @@ Contador del Bucle: 4
 Posible impacto:
 Esta configuración genera una carga muy alta en un tiempo relativamente corto (60s). Si el sistema no está bien preparado, podría colapsar debido al número de solicitudes simultáneas.
 
-![alt text](imgs_readme\image-1.png)
+![alt text](./imgs_readme/image-1.png)
 
 
 Después se configura el JMeter con la dirección del balanceador de carga:
@@ -460,13 +460,13 @@ Body:
     "fecha_ingesta": "2024-02-01 09:10:00"
 }
 ```
-![alt text](imgs_readme\image-2.png)
+![alt text](./imgs_readme/image-2.png)
 
 ### Resultados Experimento 1.
-![alt text](imgs_readme\image-3.png)
-![alt text](imgs_readme\image-4.png)
-![alt text](imgs_readme\image-5.png)
-![alt text](imgs_readme\image-6.png)
+![alt text](./imgs_readme/image-3.png)
+![alt text](./imgs_readme/image-4.png)
+![alt text](./imgs_readme/image-5.png)
+![alt text](./imgs_readme/image-6.png)
 
 1.El sistema es capaz de distribuir las solicitudes entre las instancias disponibles, sin que ninguna supere el 75% de su capacidad.
  
