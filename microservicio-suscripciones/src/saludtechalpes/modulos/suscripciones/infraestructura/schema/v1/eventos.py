@@ -8,3 +8,15 @@ class SuscripcionCreadaPayload(Record):
 
 class EventoSuscripcionCreada(EventoIntegracion):
     data = SuscripcionCreadaPayload()
+
+class SuscripcionFallidaPayload(Record):
+    id_suscripcion = String()
+
+class EventoSuscripcionFallida(EventoIntegracion):
+    data = SuscripcionFallidaPayload()
+
+class SuscripcionEliminadaPayload(Record):
+    id_suscripcion = String()
+
+class EventoSuscripcionEliminada(EventoIntegracion):
+    data = SuscripcionEliminadaPayload()

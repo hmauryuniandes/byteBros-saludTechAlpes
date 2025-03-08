@@ -1,13 +1,15 @@
 from saludtechalpes.seedwork.aplicacion.comandos import Comando
 from saludtechalpes.modulos.suscripciones.aplicacion.dto import SuscripcionDTO, ClienteDTO, PlanDTO, FacturaDTO
 from .base import CrearSuscripcionBaseHandler
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from saludtechalpes.seedwork.aplicacion.comandos import ejecutar_commando as comando
 
 from saludtechalpes.modulos.suscripciones.dominio.entidades import Suscripcion
-from saludtechalpes.seedwork.infraestructura.uow import UnidadTrabajoPuerto
+from saludtechalpes.modulos.suscripciones.dominio.eventos import SuscripcionFallida
 from saludtechalpes.modulos.suscripciones.aplicacion.mapeadores import MapeadorSuscripcion
 from saludtechalpes.modulos.suscripciones.infraestructura.repositorios import RepositorioSuscripciones
+from pydispatch import dispatcher
+import random
 
 @dataclass
 class CrearSuscripcion(Comando):
@@ -19,21 +21,28 @@ class CrearSuscripcion(Comando):
 class CrearSuscripcionHandler(CrearSuscripcionBaseHandler):
     
     def handle(self, comando: CrearSuscripcion):
-        suscripcion_dto = SuscripcionDTO(
-                cliente=comando.cliente
-            ,   plan=comando.plan
-            ,   id=comando.id
-            ,   facturas=comando.facturas)
+        try: 
+            # Introducción de una falla aleatoria
+            estado = ['normal', 'error']
+            if random.choice(estado) is 'error':
+                raise 'Error generado aleatoriamente'
 
-        suscripcion: Suscripcion = self.fabrica_suscripciones.crear_objeto(suscripcion_dto, MapeadorSuscripcion())
-        suscripcion.crear_suscripcion(suscripcion)
+            suscripcion_dto = SuscripcionDTO(
+                    cliente=comando.cliente
+                ,   plan=comando.plan
+                ,   id=comando.id
+                ,   facturas=comando.facturas)
 
-        repositorio = self.fabrica_repositorio.crear_objeto(RepositorioSuscripciones.__class__)
+            suscripcion: Suscripcion = self.fabrica_suscripciones.crear_objeto(suscripcion_dto, MapeadorSuscripcion())
+            suscripcion.crear_suscripcion(suscripcion)
 
-        UnidadTrabajoPuerto.registrar_batch(repositorio.agregar, suscripcion)
-        UnidadTrabajoPuerto.savepoint()
-        UnidadTrabajoPuerto.commit()
-
+            repositorio = self.fabrica_repositorio.crear_objeto(RepositorioSuscripciones.__class__)
+            repositorio.agregar(suscripcion)
+            for evento in suscripcion.eventos:
+                dispatcher.send(signal=f'{type(evento).__name__}Dominio', evento=evento)
+        except:
+            eventoFallido = SuscripcionFallida(id_suscripcion=str(comando.id))
+            dispatcher.send(signal=f'{type(eventoFallido).__name__}Dominio', evento=eventoFallido)
 
 @comando.register(CrearSuscripcion)
 def ejecutar_comando_crear_suscripcion(comando: CrearSuscripcion):

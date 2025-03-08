@@ -19,7 +19,8 @@ def comenzar_consumidor(app):
     import saludtechalpes.modulos.suscripciones.infraestructura.consumidores as suscripciones
 
     # Suscripción a eventos
-    threading.Thread(target=suscripciones.suscribirse_a_eventos).start()
+    threading.Thread(target=suscripciones.suscribirse_a_evento_suscription_creada).start()
+    threading.Thread(target=suscripciones.suscribirse_a_evento_suscription_fallida).start()
 
     # Suscripción a comandos
     threading.Thread(target=suscripciones.suscribirse_a_comandos, args=[app]).start()
