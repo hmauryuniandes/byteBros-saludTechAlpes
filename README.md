@@ -420,10 +420,10 @@ Aquí va el documento con los resultados.
 Se creó el grupo de contenedores en GCP, un grupo de mínimo 1, máximo 3, como regla que al alcanzar el 75% de capacidad de CPU, se redirigiera a otra instancia.
 Para éste grupo de instancias, se usaba una plantilla de instancia con las instrucciones para correr el proyecto.
 
-![alt text](imgs_readme\{AD278B78-90D2-4831-8753-A493979A6AA8}.png)
+![alt text](./imgs_readme/{AD278B78-90D2-4831-8753-A493979A6AA8}.png)
 
 Luego se construyó el balanceador de carga:
-![alt text](imgs_readme\image.png)
+![alt text](./imgs_readme/image.png)
 
 Se configura el JMeter:
 Propiedades del Hilo:
