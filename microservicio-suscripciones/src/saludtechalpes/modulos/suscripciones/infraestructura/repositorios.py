@@ -55,5 +55,6 @@ class RepositorioSuscripcionesPostgresSQL(RepositorioSuscripciones):
         raise NotImplementedError
 
     def eliminar(self, suscripcion_id: UUID):
-        # TODO
-        raise NotImplementedError
+        suscripcion_dto = db.session.get(str(suscripcion_id))
+        db.session.delete(suscripcion_dto)
+        db.session.commit()

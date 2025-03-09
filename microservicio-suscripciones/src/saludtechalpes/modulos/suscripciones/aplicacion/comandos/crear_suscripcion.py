@@ -23,9 +23,9 @@ class CrearSuscripcionHandler(CrearSuscripcionBaseHandler):
     def handle(self, comando: CrearSuscripcion):
         try: 
             # Introducción de una falla aleatoria
-            estado = ['normal', 'error']
-            if random.choice(estado) is 'error':
-                raise 'Error generado aleatoriamente'
+            # estado = ['normal', 'error']
+            # if random.choice(estado) is 'error':
+            #     raise 'Error generado aleatoriamente'
 
             suscripcion_dto = SuscripcionDTO(
                     cliente=comando.cliente
@@ -38,11 +38,16 @@ class CrearSuscripcionHandler(CrearSuscripcionBaseHandler):
 
             repositorio = self.fabrica_repositorio.crear_objeto(RepositorioSuscripciones.__class__)
             repositorio.agregar(suscripcion)
+
             for evento in suscripcion.eventos:
                 dispatcher.send(signal=f'{type(evento).__name__}Dominio', evento=evento)
+                dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)
+
         except:
             eventoFallido = SuscripcionFallida(id_suscripcion=str(comando.id))
             dispatcher.send(signal=f'{type(eventoFallido).__name__}Dominio', evento=eventoFallido)
+            dispatcher.send(signal=f'{type(eventoFallido).__name__}Integracion', evento=eventoFallido)
+
 
 @comando.register(CrearSuscripcion)
 def ejecutar_comando_crear_suscripcion(comando: CrearSuscripcion):

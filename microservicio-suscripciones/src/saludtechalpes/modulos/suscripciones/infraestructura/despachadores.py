@@ -22,7 +22,7 @@ class Despachador:
     def publicar_evento(self, evento, topico):
         if type(evento).__name__ == "SuscripcionCreada":
             payload = SuscripcionCreadaPayload(
-                codigocliente=str(evento.codigo_cliente), 
+                codigo_cliente=str(evento.codigo_cliente), 
                 codigo_plan=str(evento.codigo_plan), 
                 id_suscripcion=str(evento.id_suscripcion)
             )

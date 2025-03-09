@@ -27,6 +27,7 @@ class CompensacionCrearSuscripcionHandler(CrearSuscripcionBaseHandler):
 
             for evento in suscripcion.eventos:
                 dispatcher.send(signal=f'{type(evento).__name__}Dominio', evento=evento)
+                dispatcher.send(signal=f'{type(evento).__name__}Integracion', evento=evento)
         except:
             print('Error procesando comando CompensacionCrearSuscripcion')
 

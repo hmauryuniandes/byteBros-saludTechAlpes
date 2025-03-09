@@ -70,7 +70,7 @@ class CoordinadorOrquestacion(CoordinadorSaga, ABC):
     index: int
     
     def obtener_paso_dado_un_evento(self, evento: EventoDominio):
-        for i, paso in enumerate(pasos):
+        for i, paso in enumerate(self.pasos):
             if not isinstance(paso, Transaccion):
                 continue
 
@@ -79,11 +79,11 @@ class CoordinadorOrquestacion(CoordinadorSaga, ABC):
         raise Exception("Evento no hace parte de la transacción")
                 
     def es_ultima_transaccion(self, index):
-        return len(self.pasos) - 1
+        return len(self.pasos) - 1 == index
 
     def procesar_evento(self, evento: EventoDominio):
         paso, index = self.obtener_paso_dado_un_evento(evento)
-        if es_ultima_transaccion(index) and not isinstance(evento, paso.error):
+        if self.es_ultima_transaccion(index) and not isinstance(evento, paso.error):
             self.terminar()
         elif isinstance(evento, paso.error):
             # si llega al 0 debe terminar la transaccion con error
