@@ -12,7 +12,7 @@ class CoordinadorSuscripciones(CoordinadorOrquestacion):
     def inicializar_pasos(self):
         self.pasos = [
             Inicio(index=0),
-            #Transaccion(index=1, comando=CrearSuscripcion, evento=SuscripcionCreada, error=SuscripcionFallida, compensacion=CompensacionCrearSuscripcion),
+            Transaccion(index=1, comando=CrearSuscripcion, evento=SuscripcionCreada, error=SuscripcionFallida, compensacion=CompensacionCrearSuscripcion),
             Fin(index=5)
         ]
 
