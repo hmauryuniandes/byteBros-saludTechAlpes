@@ -14,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"cliente\": {\r\n            \"codigo\": \"0001\",\r\n            \"nombre\": {\r\n                \"nombres\": \"Pablo\",\r\n                \"apellidos\": \"Perez Prieto\"\r\n            },\r\n            \"usuario\": \"pperez\",\r\n            \"rut\": {\r\n                \"numero\": 123457890\r\n            },\r\n            \"cedula\": {\r\n                \"numero\": 123457890\r\n            },\r\n            \"email\": \"pperez@domain.com\"\r\n    },\r\n    \"plan\": {\r\n            \"codigo\": \"pro\",\r\n            \"nombre\": \"PRO\"\r\n    },\r\n    \"facturas\": []\r\n    }",
+					"raw": "{\r\n    \"cliente_codigo\": \"0001\",\r\n    \"cliente_nombres\": \"Pablo\",\r\n    \"cliente_apellidos\": \"Perez Prieto\",\r\n    \"cliente_usuario\": \"pperez\",\r\n    \"cliente_rut\": \"1234567890\",\r\n    \"cliente_cedula\": \"987654321\",\r\n    \"cliente_email\": \"pperez@domain.com\",\r\n    \"plan_codigo\": \"pro\",\r\n    \"plan_nombre\": \"PRO\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -22,6 +22,24 @@
 					}
 				},
 				"url": "{{bff}}/suscripciones/suscripcion-comando"
+			},
+			"response": []
+		},
+		{
+			"name": "Iniciar Saga Suscripcion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_suscripcion\": \"{{$randomUUID}}\",\r\n    \"cliente_codigo\": \"0001\",\r\n    \"cliente_nombres\": \"Pablo Saga\",\r\n    \"cliente_apellidos\": \"Perez Prieto\",\r\n    \"cliente_usuario\": \"pperez\",\r\n    \"cliente_rut\": \"1234567890\",\r\n    \"cliente_cedula\": \"987654321\",\r\n    \"cliente_email\": \"pperez@domain.com\",\r\n    \"plan_codigo\": \"pro\",\r\n    \"plan_nombre\": \"PRO\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{bff}}/sagas/iniciar-suscripcion-comando"
 			},
 			"response": []
 		},
@@ -95,11 +113,6 @@
 	],
 	"variable": [
 		{
-			"key": "bff",
-			"value": "http://34.136.120.7:5005",
-			"type": "string"
-		},
-		{
 			"key": "servicio_datos",
 			"value": "http://34.136.120.7:5001",
 			"type": "string"
@@ -112,6 +125,16 @@
 		{
 			"key": "prosesamiento",
 			"value": "http://34.136.120.7:5002\n",
+			"type": "string"
+		},
+		{
+			"key": "suscripciones",
+			"value": "http://34.136.120.7:5000",
+			"type": "string"
+		},
+		{
+			"key": "bff",
+			"value": "http://localhost:5005",
 			"type": "string"
 		}
 	]
