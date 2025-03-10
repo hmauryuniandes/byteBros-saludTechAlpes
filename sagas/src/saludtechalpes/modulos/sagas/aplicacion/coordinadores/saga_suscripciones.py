@@ -1,7 +1,7 @@
 from saludtechalpes.seedwork.aplicacion.comandos import Comando
 from saludtechalpes.modulos.sagas.dominio.entidades import SagaLog
 from saludtechalpes.modulos.sagas.dominio.repositorios import RepositorioSagas
-from saludtechalpes.modulos.sagas.infraestructura.schema.v1.comandos import ComandoCompensacionCrearSuscripcion, ComandoCrearSuscripcion, ComandoCrearSuscripcionPayload
+from saludtechalpes.modulos.sagas.infraestructura.schema.v1.comandos import ComandoCompensacionCrearSuscripcion, ComandoCompensacionCrearSuscripcionPayload, ComandoCrearSuscripcion, ComandoCrearSuscripcionPayload
 from saludtechalpes.modulos.sagas.infraestructura.schema.v1.eventos import EventoSuscripcionCreada, EventoSuscripcionFallida
 from saludtechalpes.seedwork.infraestructura.schema.v1.eventos import EventoIntegracion
 from saludtechalpes.seedwork.aplicacion.sagas import CoordinadorOrquestacion, Transaccion, Inicio, Fin
@@ -72,6 +72,12 @@ class CoordinadorSuscripciones(CoordinadorOrquestacion):
                 plan_nombre = evento.data.get('plan_nombre')
             )
             return ComandoCrearSuscripcion(data=payload)
+        
+        if  tipo_comando.__class__ is ComandoCompensacionCrearSuscripcion.__class__:
+            payload = ComandoCompensacionCrearSuscripcionPayload(
+                id = evento.data.get('id_suscripcion')
+            )
+            return ComandoCompensacionCrearSuscripcion(data=payload)
         
         raise NotImplementedError("Comando no implementado en la saga")
     

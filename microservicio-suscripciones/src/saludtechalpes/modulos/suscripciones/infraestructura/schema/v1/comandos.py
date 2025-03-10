@@ -18,9 +18,7 @@ class ComandoCrearSuscripcion(ComandoIntegracion):
     data = ComandoCrearSuscripcionPayload()
 
 class ComandoCompensacionCrearSuscripcionPayload(ComandoIntegracion):
-    cliente_codigo = String()
-    plan_codigo = String()
-    id_suscripcion = String()
+    id = String()
 
 class ComandoCompensacionCrearSuscripcion(ComandoIntegracion):
     data = ComandoCrearSuscripcionPayload()
