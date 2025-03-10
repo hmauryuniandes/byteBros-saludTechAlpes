@@ -402,7 +402,7 @@ Se emite como una confirmación de que la notificación fue procesada correctame
 ### Ejecución en docker-compose usando profiles
 
 ```bash
-docker-compose --profile pulsar --profile suscripciones --profile procesamiento --profile bff_web up --profile notificaciones --profile serviciodatos up -d --build
+docker-compose --profile pulsar --profile sagas --profile suscripciones --profile procesamiento --profile bff_web up --profile notificaciones --profile serviciodatos up -d --build
 ```
 
 ### Despliegue en GCP: 
