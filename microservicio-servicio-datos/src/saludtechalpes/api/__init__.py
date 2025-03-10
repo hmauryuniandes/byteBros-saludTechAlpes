@@ -8,16 +8,17 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 def importar_modelos_alchemy():
     import saludtechalpes.modulos.servicioDatos.infraestructura.dto
 
-def comenzar_consumidor():
+def comenzar_consumidor(app):
 
     import threading
     import saludtechalpes.modulos.servicioDatos.infraestructura.consumidores as servicioDatos
 
     # Suscripción a eventos
-    threading.Thread(target=servicioDatos.suscribirse_a_eventos).start()
-
+    #threading.Thread(target=servicioDatos.suscribirse_a_evento_infraestructura_creada).start()
+    #threading.Thread(target=servicioDatos.suscribirse_a_evento_infraestructura_no_creada).start()
     # Suscripción a comandos
-    threading.Thread(target=servicioDatos.suscribirse_a_comandos).start()
+    threading.Thread(target=servicioDatos.suscribirse_a_comandos, args=[app]).start()
+    threading.Thread(target=servicioDatos.suscribirse_a_compensacion_comandos, args=[app]).start()
    
 def create_app(configuracion={}):
     # Init la aplicacion de Flask

@@ -4,7 +4,7 @@ En este archivo usted encontrará las entidades del dominio de servicio de datos
 
 """
 
-from saludtechalpes.modulos.servicioDatos.dominio.eventos import ServicioDatosCreada
+from saludtechalpes.modulos.servicioDatos.dominio.eventos import InfraestructuraCreada, InfraestructuraEliminada
 from saludtechalpes.seedwork.dominio.entidades import AgregacionRaiz, Entidad
 from dataclasses import dataclass, field
 from .objetos_valor import Codigo, Fecha, Nombre, Email, Cedula, NombrePlan, Usuario, TipoNube, NombreNube, NombreImagen, NombreDataset, NombreTipoNube
@@ -61,10 +61,13 @@ class ServicioDatos(AgregacionRaiz):
     nube: Nube = field(default_factory=Nube)
     dataset: DataSet = field(default_factory=DataSet)
 
-    def crear_servicio_datos(self, servicioDatos):
+    def crear_infraestructura(self, servicioDatos):
         self.suscripcion = servicioDatos.suscripcion
-        self.experto = servicioDatos.experto
-        self.nube = servicioDatos.nube
-        self.dataset = servicioDatos.dataset
+        self.experto = '100'
+        self.nube = '01'
+        self.dataset = '05'
 
-        self.agregar_evento(ServicioDatosCreada(codigo_suscripcion=self.suscripcion.codigo, codigo_experto=self.experto.codigo, codigo_nube=self.nube.codigo, codigo_data_set=self.dataset.codigo, id_serviciodatos=self.id))
+        self.agregar_evento(InfraestructuraCreada(codigo_suscripcion=self.suscripcion.codigo, codigo_experto=self.experto.codigo, codigo_nube=self.nube.codigo, codigo_data_set=self.dataset.codigo, id_serviciodatos=self.id))
+
+    def eliminar_infraestructura(self):
+        self.agregar_evento(InfraestructuraEliminada(id_suscripcion=self.suscripcion.id, id_serviciodatos=self.id))

@@ -19,4 +19,24 @@ class SuscripcionEliminadaPayload(Record):
     id_suscripcion = String()
 
 class EventoSuscripcionEliminada(EventoIntegracion):
-    data = SuscripcionEliminadaPayload()    
+    data = SuscripcionEliminadaPayload()
+
+class InfraestructuraCreadaPayload(Record):
+    id_serviciodatos = String()
+    id_suscripcion = string()
+
+class EventoInfraestructuraCreada(EventoIntegracion):
+    data = InfraestructuraCreadaPayload()
+
+class InfraestructuraNoCreadaPayload(Record):
+    id_suscripcion = String()
+
+class EventoInfraestructuraNoCreada(EventoIntegracion):
+    data = InfraestructuraNoCreadaPayload()
+
+class InfraestructuraEliminadaPayload(Record):
+    id_serviciodatos = String()
+    id_suscripcion = string()
+
+class EventoInfraestructuraEliminada(EventoIntegracion):
+    data = InfraestructuraEliminadaPayload()    

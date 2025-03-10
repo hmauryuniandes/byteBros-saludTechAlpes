@@ -7,7 +7,7 @@ import traceback
 
 from saludtechalpes.modulos.sagas.aplicacion.coordinadores.saga_suscripciones import oir_mensaje
 from saludtechalpes.modulos.sagas.aplicacion.comandos.iniciar_suscripcion import IniciarSuscripcion
-from saludtechalpes.modulos.sagas.infraestructura.schema.v1.eventos import EventoSuscripcionCreada, EventoSuscripcionFallida, SuscripcionCreadaPayload, SuscripcionFallidaPayload
+from saludtechalpes.modulos.sagas.infraestructura.schema.v1.eventos import EventoSuscripcionCreada, EventoSuscripcionFallida, SuscripcionCreadaPayload, SuscripcionFallidaPayload, EventoInfraestructuraCreada, EventoInfraestructuraNoCreada, InfraestructuraCreadaPayload, InfraestructuraNoCreadaPayload
 from saludtechalpes.modulos.sagas.infraestructura.schema.v1.comandos import ComandoIniciarSuscripcion
 from saludtechalpes.seedwork.infraestructura import utils
 from saludtechalpes.seedwork.aplicacion.comandos import ejecutar_commando
@@ -58,6 +58,55 @@ def suscribirse_a_evento_suscription_fallida(app=None):
         cliente.close()
     except:
         logging.error('ERROR: Suscribiendose al tópico de eventos-suscripcion-creada!')
+        traceback.print_exc()
+        if cliente:
+            cliente.close()
+
+def suscribirse_a_evento_infraestructura_creada(app=None):
+    cliente = None
+    try:
+        cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
+        consumidor = cliente.subscribe('eventos-infraestructura-creada', consumer_type=_pulsar.ConsumerType.Shared,subscription_name='saludtechalpes-sub-eventos', schema=AvroSchema(EventoInfraestructuraCreada))
+
+        while True:
+            mensaje = consumidor.receive()
+            print(f'Evento recibido - EventoInfraestructuraCreada: {mensaje.value().data}')
+            data = mensaje.value().data
+            payload = InfraestructuraCreadaPayload(
+                id_serviciodatos = data.id_serviciodatos,
+                id_suscripcion =data.id_suscripcion
+            )
+            with app.app_context():
+                oir_mensaje(EventoInfraestructuraCreada(data=payload))
+                consumidor.acknowledge(mensaje)     
+
+        cliente.close()
+    except:
+        logging.error('ERROR: Suscribiendose al tópico de eventos-infraestructura-creada!')
+        traceback.print_exc()
+        if cliente:
+            cliente.close()
+
+def suscribirse_a_evento_infraestructura_no_creada(app=None):
+    cliente = None
+    try:
+        cliente = pulsar.Client(f'pulsar://{utils.broker_host()}:6650')
+        consumidor = cliente.subscribe('eventos-infraestructura-no-creada', consumer_type=_pulsar.ConsumerType.Shared,subscription_name='saludtechalpes-sub-eventos', schema=AvroSchema(EventoInfraestructuraNoCreada))
+
+        while True:
+            mensaje = consumidor.receive()
+            print(f'Evento recibido - EventoInfraestructuraNoCreada: {mensaje.value().data}')
+            data = mensaje.value().data
+            payload = InfraestructuraNoCreadaPayload(
+                id_suscripcion =data.id_suscripcion
+            )
+            with app.app_context():
+                oir_mensaje(EventoInfraestructuraNoCreada(data=payload))
+                consumidor.acknowledge(mensaje)
+
+        cliente.close()
+    except:
+        logging.error('ERROR: Suscribiendose al tópico de eventos-infraestructura-no-creada!')
         traceback.print_exc()
         if cliente:
             cliente.close()

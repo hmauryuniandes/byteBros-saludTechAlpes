@@ -21,11 +21,11 @@ class MapeadorServicioDatosDTOJson(AppMap):
         return PlanDTO(codigo, nombre)
     
     def _procesar_suscripcion(self, suscripcion: dict) -> SuscripcionDTO:
-        codigo = suscripcion.get('codigo')
-        cliente = suscripcion.get('cliente')
-        plan = suscripcion.get('plan')
+        suscripcion = str(suscripcion.get('id_suscripcion'))
+        plan = str(suscripcion.get('id_plan'))
+        cliente = suscripcion.get('id_cliente')
 
-        return SuscripcionDTO(codigo, cliente, plan)
+        return SuscripcionDTO(suscripcion, plan, cliente)
     
     def _procesar_experto(self, experto: dict) -> ExpertoDTO:
         codigo = experto.get('codigo')
@@ -49,18 +49,14 @@ class MapeadorServicioDatosDTOJson(AppMap):
         return DataSetDTO(codigo, nombre)
     
     def externo_a_dto(self, externo: dict) -> ServicioDatosDTO:
-        suscripcion = self._procesar_suscripcion(externo.get('suscripcion'))
-        experto = self._procesar_experto(externo.get('experto'))
-        nube = self._procesar_nube(externo.get('nube'))
-        dataset = self._procesar_dataset(externo.get('dataset'))
-
+        suscripcion = self._procesar_suscripcion(externo)
 
         # TODO
         # suscripcion_dto.facturas = list()
         # for factura in externo.get('facturas', list()):
         #     suscripcion_dto.facturas.append(self._procesar_factura(factura))
 
-        return ServicioDatosDTO(suscripcion=suscripcion, experto=experto, nube=nube,dataset=dataset)
+        return ServicioDatosDTO(suscripcion=suscripcion)
 
     def dto_a_externo(self, dto: ServicioDatosDTO) -> dict:
         return dto.__dict__
@@ -159,10 +155,6 @@ class MapeadorServicioDatos(RepMap):
 
     def dto_a_entidad(self, dto: ServicioDatosDTO) -> ServicioDatos:
         suscripcion = self._procesar_suscripcion(dto.suscripcion)
-        experto = self._procesar_experto(dto.experto)
-        nube = self._procesar_nube(dto.nube)
-        dataset = self._procesar_dataset(dto.dataset)
-
         #TODO
         # suscripcion.facturas = list()
 
