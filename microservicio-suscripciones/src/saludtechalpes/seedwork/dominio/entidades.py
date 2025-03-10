@@ -30,10 +30,11 @@ class Entidad:
 
     @id.setter
     def id(self, id: uuid.UUID) -> None:
-        if not IdEntidadEsInmutable(self).es_valido():
-            raise IdDebeSerInmutableExcepcion()
-        self._id = self.siguiente_id()
+        # if not IdEntidadEsInmutable(self).es_valido():
+        #     raise IdDebeSerInmutableExcepcion()
         
+        # self._id = self.siguiente_id()
+        self._id = id
 
 @dataclass
 class AgregacionRaiz(Entidad, ValidarReglasMixin):

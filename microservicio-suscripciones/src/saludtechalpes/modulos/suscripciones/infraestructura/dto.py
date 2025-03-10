@@ -30,20 +30,25 @@ class Cliente(db.Model):
     email_address = db.Column(db.String, nullable=True)
     email_domain = db.Column(db.String, nullable=True)
 
+    suscripciones = db.relationship("Suscripcion", back_populates="cliente")
+
 class Plan(db.Model):
     __tablename__ = "planes"
     id = db.Column(db.String, primary_key=True)
     codigo = db.Column(db.String, nullable=False)
     nombre = db.Column(db.String, nullable=False)
 
+    suscripciones = db.relationship("Suscripcion", back_populates="plan")
 
 class Suscripcion(db.Model):
     __tablename__ = "suscripciones"
     id = db.Column(db.String, primary_key=True)
-    cliente_id = db.Column(db.String, ForeignKey("clientes.id"))
-    cliente: Cliente = db.relationship("Cliente", backref=db.backref("clientes", uselist=False))
-    plan_id = db.Column(db.String, ForeignKey("planes.id"))
-    plan: Plan =  db.relationship("Plan", backref=db.backref("planes", uselist=False))
     fecha_creacion = db.Column(db.DateTime, nullable=False)
     fecha_actualizacion = db.Column(db.DateTime, nullable=False)
     estado = db.Column(db.String)
+
+    cliente_id = db.Column(db.String, ForeignKey("clientes.id"))
+    cliente: Cliente = db.relationship("Cliente", back_populates="suscripciones")
+
+    plan_id = db.Column(db.String, ForeignKey("planes.id"))
+    plan: Plan =  db.relationship("Plan", back_populates="suscripciones")

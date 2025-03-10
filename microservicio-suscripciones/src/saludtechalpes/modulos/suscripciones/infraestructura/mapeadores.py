@@ -5,6 +5,7 @@ encargados de la transformación entre formatos de dominio y DTOs
 
 """
 
+import uuid
 from saludtechalpes.modulos.suscripciones.aplicacion.dto import PlanDTO
 from saludtechalpes.modulos.suscripciones.dominio.objetos_valor import Cedula, Codigo, Email, Nombre, NombrePlan, Rut, Usuario
 from saludtechalpes.seedwork.dominio.repositorios import Mapeador
@@ -37,7 +38,7 @@ class MapeadorSuscripcion(Mapeador):
         cliente_dto.numero_cedula = cliente.cedula.numero
         cliente_dto.email_address = cliente.email.address
         cliente_dto.email_domain = cliente.email.dominio
-        cliente_dto.id = str(cliente.id)
+        cliente_dto.id = str(cliente.id or uuid.uuid4())
 
         return cliente_dto
     
@@ -52,7 +53,7 @@ class MapeadorSuscripcion(Mapeador):
         plan_dto = PlanDTO()
         plan_dto.codigo = plan.codigo.valor
         plan_dto.nombre = plan.nombre.nombre
-        plan_dto.id = str(plan.id)
+        plan_dto.id = str(plan.id or uuid.uuid4())
 
         return plan_dto
 
@@ -64,12 +65,10 @@ class MapeadorSuscripcion(Mapeador):
         suscripcion_dto.fecha_creacion = entidad.fecha_creacion
         suscripcion_dto.fecha_actualizacion = entidad.fecha_actualizacion
         suscripcion_dto.cliente = self._procesar_cliente(entidad.cliente)
-        # suscripcion_dto.cliente_id = entidad.client.id
         suscripcion_dto.plan = self._procesar_plan(entidad.plan)
-        # suscripcion_dto.plan_id = entidad.plan.id
         suscripcion_dto.fecha_actualizacion = entidad.fecha_actualizacion
         suscripcion_dto.fecha_actualizacion = entidad.fecha_actualizacion
-        suscripcion_dto.id = str(entidad.id)
+        suscripcion_dto.id = str(entidad.id or uuid.uuid4())
         suscripcion_dto.estado = entidad.estado
 
         return suscripcion_dto

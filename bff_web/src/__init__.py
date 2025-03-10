@@ -12,10 +12,12 @@ def create_app(configuracion={}):
      # Importa Blueprints
     from . import suscripciones
     from . import procesamiento
+    from . import sagas
 
     # Registro de Blueprints
     app.register_blueprint(suscripciones.bp)
     app.register_blueprint(procesamiento.bp)
+    app.register_blueprint(sagas.bp)
     @app.route("/spec")
     def spec():
         swag = swagger(app)

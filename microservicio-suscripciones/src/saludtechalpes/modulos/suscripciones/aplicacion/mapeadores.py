@@ -45,15 +45,13 @@ class MapeadorSuscripcionDTOJson(AppMap):
         cliente = self._procesar_cliente(externo)
         plan = self._procesar_plan(externo)
 
-
-        return SuscripcionDTO(cliente=cliente, plan=plan)
+        return SuscripcionDTO(id=externo.get('id_suscripcion'), cliente=cliente, plan=plan)
 
     def dto_a_externo(self, dto: SuscripcionDTO) -> dict:
         # TODO convertir a json con la estructura del schema
         return dto.__dict__
 
 class MapeadorSuscripcion(RepMap):
-    _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
 
     def _procesar_cliente(self, cliente: ClienteDTO) -> Cliente:
         codigo = Codigo(cliente.codigo)
@@ -100,8 +98,9 @@ class MapeadorSuscripcion(RepMap):
     def dto_a_entidad(self, dto: SuscripcionDTO) -> Suscripcion:
         cliente = self._procesar_cliente(dto.cliente)
         plan = self._procesar_plan(dto.plan)
-       
-        return Suscripcion(cliente=cliente, plan=plan, estado=dto.estado)
+        suscripcion = Suscripcion(id=dto.id, cliente=cliente, plan=plan, estado=dto.estado)
+
+        return suscripcion
 
 
 

@@ -6,7 +6,7 @@ from flask_swagger import swagger
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 def importar_modelos_alchemy():
-    import saludtechalpes.modulos.suscripciones.infraestructura.dto
+    import saludtechalpes.modulos.sagas.infraestructura.dto
 
 def comenzar_consumidor(app):
     """
@@ -16,14 +16,14 @@ def comenzar_consumidor(app):
     """
 
     import threading
-    import saludtechalpes.modulos.suscripciones.infraestructura.consumidores as suscripciones
+    import saludtechalpes.modulos.sagas.infraestructura.consumidores as sagas
 
     # Suscripción a eventos
-    # threading.Thread(target=suscripciones.suscribirse_a_evento_suscription_creada).start()
-    # threading.Thread(target=suscripciones.suscribirse_a_evento_suscription_fallida).start()
+    threading.Thread(target=sagas.suscribirse_a_evento_suscription_creada, args=[app]).start()
+    threading.Thread(target=sagas.suscribirse_a_evento_suscription_fallida, args=[app]).start()
 
     # Suscripción a comandos
-    threading.Thread(target=suscripciones.suscribirse_a_comandos, args=[app]).start()
+    threading.Thread(target=sagas.suscribirse_a_comandos, args=[app]).start()
    
 def create_app(configuracion={}):
     # Init la aplicacion de Flask
@@ -35,7 +35,6 @@ def create_app(configuracion={}):
 
     app.secret_key = '9d58f98f-3ae8-4149-a09f-3a8c2012e32c'
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['TESTING'] = configuracion.get('TESTING')
 
      # Inicializa la DB
     from saludtechalpes.config.db import init_db
@@ -47,21 +46,20 @@ def create_app(configuracion={}):
 
     with app.app_context():
         db.create_all()
-        if not app.config.get('TESTING'):
-            comenzar_consumidor(app)
+        comenzar_consumidor(app)
 
      # Importa Blueprints
-    from . import suscripciones
+    from . import sagas
    
 
     # Registro de Blueprints
-    app.register_blueprint(suscripciones.bp)
+    app.register_blueprint(sagas.bp)
 
     @app.route("/spec")
     def spec():
         swag = swagger(app)
         swag['info']['version'] = "1.0"
-        swag['info']['title'] = "Suscripciones API"
+        swag['info']['title'] = "Sagas API"
         return jsonify(swag)
 
     @app.route("/health")
