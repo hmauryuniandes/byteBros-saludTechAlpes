@@ -56,5 +56,6 @@ class RepositorioServiciosDatosPostgresSQL(RepositorioServicioDatos):
         raise NotImplementedError
 
     def eliminar(self, servicioDatos_id: UUID):
-        # TODO
-        raise NotImplementedError
+        serviciodatos_dto = db.session.get(str(servicioDatos_id))
+        db.session.delete(serviciodatos_dto)
+        db.session.commit()

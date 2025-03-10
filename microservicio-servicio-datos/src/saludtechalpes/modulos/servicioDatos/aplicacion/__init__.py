@@ -2,6 +2,9 @@ from pydispatch import dispatcher
 
 from .handlers import HandlerServicioDatosIntegracion 
 
-from saludtechalpes.modulos.servicioDatos.dominio.eventos import ServicioDatosCreada
+from saludtechalpes.modulos.servicioDatos.dominio.eventos import InfraestructuraCreada, InfraestrucraNoCreada, InfraestructuraEliminada
 
-dispatcher.connect(HandlerServicioDatosIntegracion.handle_servicio_datos_creada, signal=f'{ServicioDatosCreada.__name__}Integracion')
+dispatcher.connect(HandlerServicioDatosIntegracion.handle_infraestructura_creada, signal=f'{InfraestructuraCreada.__name__}Integracion')
+dispatcher.connect(HandlerServicioDatosIntegracion.handle_infraestructura_no_creada, signal=f'{InfraestrucraNoCreada.__name__}Integracion')
+dispatcher.connect(HandlerServicioDatosIntegracion.handle_infraestructura_eliminada, signal=f'{InfraestructuraEliminada.__name__}Integracion')
+

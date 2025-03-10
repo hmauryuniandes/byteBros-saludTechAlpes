@@ -21,6 +21,8 @@ def comenzar_consumidor(app):
     # Suscripción a eventos
     threading.Thread(target=sagas.suscribirse_a_evento_suscription_creada, args=[app]).start()
     threading.Thread(target=sagas.suscribirse_a_evento_suscription_fallida, args=[app]).start()
+    threading.Thread(target=sagas.suscribirse_a_evento_infraestructura_creada, args=[app]).start()
+    threading.Thread(target=sagas.suscribirse_a_evento_infraestructura_no_creada, args=[app]).start()
 
     # Suscripción a comandos
     threading.Thread(target=sagas.suscribirse_a_comandos, args=[app]).start()

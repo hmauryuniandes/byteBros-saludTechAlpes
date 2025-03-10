@@ -1,8 +1,15 @@
 from pulsar.schema import *
 from saludtechalpes.seedwork.infraestructura.schema.v1.eventos import EventoIntegracion
 
-class ServicioDatosCreadaPayload(Record):
+class InfraestructuraCreadaPayload(Record):
     id_serviciodatos = String()
+    id_suscripcion = string()
 
-class EventoServicioDatosCreada(EventoIntegracion):
-    data = ServicioDatosCreadaPayload()
+class EventoInfraestructuraCreada(EventoIntegracion):
+    data = InfraestructuraCreadaPayload()
+
+class InfraestructuraNoCreadaPayload(Record):
+    id_suscripcion = String()
+
+class EventoInfraestructuraNoCreada(EventoIntegracion):
+    data = InfraestructuraNoCreadaPayload()

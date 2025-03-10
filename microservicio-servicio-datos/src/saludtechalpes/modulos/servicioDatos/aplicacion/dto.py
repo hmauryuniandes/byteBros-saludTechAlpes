@@ -14,9 +14,9 @@ class PlanDTO(DTO):
 
 @dataclass(frozen=True)
 class SuscripcionDTO(DTO):
-    codigo: str
-    cliente: ClienteDTO
-    plan: PlanDTO
+    suscripcion: str 
+    plan: str
+    cliente: str
 
 @dataclass(frozen=True)
 class ExpertoDTO(DTO):
