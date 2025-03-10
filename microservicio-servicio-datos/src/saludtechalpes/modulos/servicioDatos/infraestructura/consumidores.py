@@ -5,6 +5,7 @@ import time
 import logging
 import traceback
 
+from saludtechalpes.modulos.servicioDatos.aplicacion.comandos.compensacion_crear_infraestructura import CompensacionCrearInfraestructura
 from saludtechalpes.modulos.servicioDatos.aplicacion.comandos.crear_infraestructura import CrearInfraestrctura
 from saludtechalpes.modulos.servicioDatos.infraestructura.schema.v1.eventos import EventoInfraestructuraCreada, EventoInfraestructuraNoCreada
 from saludtechalpes.modulos.servicioDatos.infraestructura.schema.v1.comandos import ComandoCrearInfraestructura, ComandoCompensacionCrearInfraestructura
@@ -62,12 +63,10 @@ def suscribirse_a_comandos(app=None):
             try:
                 with app.app_context():
                     serviciodatos_dict = valor.data.__dict__
-
                     map_serviciodatos = MapeadorServicioDatosDTOJson()
-
                     serviciodatos_dto = map_serviciodatos.externo_a_dto(serviciodatos_dict)
-
-                    comando = CrearInfraestrctura(suscripcion=serviciodatos_dto.suscripcion, experto=serviciodatos_dto.experto, nube=serviciodatos_dto.nube, dataset=serviciodatos_dto.dataset, id=serviciodatos_dto.id)
+                    
+                    comando = CrearInfraestrctura(suscripcion=serviciodatos_dto.suscripcion, id=serviciodatos_dto.id)
                     ejecutar_commando(comando)
             except:
                 logging.error('ERROR: Procesando comando!')

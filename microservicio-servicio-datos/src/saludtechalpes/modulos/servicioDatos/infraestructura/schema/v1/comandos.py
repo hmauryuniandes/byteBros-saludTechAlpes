@@ -6,7 +6,6 @@ class ComandoCrearInfraestructuraPayload(ComandoIntegracion):
     id_cliente = String()
     id_plan = String()
     id_suscripcion = String()
-    # TODO Cree los records para itinerarios
 
 class ComandoCrearInfraestructura(ComandoIntegracion):
     data = ComandoCrearInfraestructuraPayload()

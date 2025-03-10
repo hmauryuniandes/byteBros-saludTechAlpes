@@ -6,13 +6,22 @@ from saludtechalpes.modulos.sagas.aplicacion.coordinadores.saga_suscripciones im
 
 @dataclass
 class IniciarSuscripcion(Comando):
-    data: dict
+    cliente_codigo: str
+    cliente_nombres: str
+    cliente_apellidos: str
+    cliente_usuario: str
+    cliente_rut: str
+    cliente_cedula: str
+    cliente_email: str
+    plan_codigo: str
+    plan_nombre: str
+    id_suscripcion: str
 
 class IniciarSuscripcionHandler():
     
     def handle(self, comando: IniciarSuscripcion):
         # try: 
-            saga = CoordinadorSuscripciones(comando.data.get('id_suscripcion'))
+            saga = CoordinadorSuscripciones(comando.id_suscripcion)
             saga.iniciar(comando)
         # except:
         #     print('Error comando IniciarSuscripcion')

@@ -20,6 +20,7 @@ class Despachador:
         cliente.close()
 
     def publicar_evento(self, evento, topico):
+        print(f'Enviando evento: {type(evento).__name__}')
         if type(evento).__name__ == "InfraestructuraCreada":
             payload = InfraestructuraCreadaPayload(
                 id_serviciodatos = str(evento.id_serviciodatos),
@@ -28,12 +29,13 @@ class Despachador:
             evento_integracion = EventoInfraestructuraCreada(data=payload)
             self._publicar_mensaje(evento_integracion, topico, AvroSchema(EventoInfraestructuraCreada))
         
-        if type(evento).__name__ == "InfraestruraNoCreada":
+        if type(evento).__name__ == "InfraestructuraNoCreada":
             payload = InfraestructuraNoCreadaPayload(
                 id_suscripcion=str(evento.id_suscripcion)
             )
             evento_integracion = EventoInfraestructuraNoCreada(data=payload)
             self._publicar_mensaje(evento_integracion, topico, AvroSchema(EventoInfraestructuraNoCreada))
+            print(f'evento enviado!: {type(evento).__name__}')
 
         if type(evento).__name__ == "InfraestructuraEliminada":
             payload = InfraestructuraEliminadaPayload(

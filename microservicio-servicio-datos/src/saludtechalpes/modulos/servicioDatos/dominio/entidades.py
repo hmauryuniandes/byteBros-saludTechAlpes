@@ -57,17 +57,17 @@ class DataSet(Entidad):
 @dataclass
 class ServicioDatos(AgregacionRaiz):
     suscripcion: Suscripcion = field(default_factory=Suscripcion)
-    experto: Experto = field(default_factory=Experto)
-    nube: Nube = field(default_factory=Nube)
-    dataset: DataSet = field(default_factory=DataSet)
+    # experto: Experto = field(default_factory=Experto)
+    # nube: Nube = field(default_factory=Nube)
+    # dataset: DataSet = field(default_factory=DataSet)
 
     def crear_infraestructura(self, servicioDatos):
         self.suscripcion = servicioDatos.suscripcion
-        self.experto = '100'
-        self.nube = '01'
-        self.dataset = '05'
+        # self.experto = '100'
+        # self.nube = '01'
+        # self.dataset = '05'
 
-        self.agregar_evento(InfraestructuraCreada(codigo_suscripcion=self.suscripcion.codigo, codigo_experto=self.experto.codigo, codigo_nube=self.nube.codigo, codigo_data_set=self.dataset.codigo, id_serviciodatos=self.id))
+        self.agregar_evento(InfraestructuraCreada(id_suscripcion=self.suscripcion.codigo.valor, id_serviciodatos=self.id))
 
     def eliminar_infraestructura(self):
         self.agregar_evento(InfraestructuraEliminada(id_suscripcion=self.suscripcion.id, id_serviciodatos=self.id))

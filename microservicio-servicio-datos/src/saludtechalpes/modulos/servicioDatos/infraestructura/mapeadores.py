@@ -68,9 +68,9 @@ class MapeadorServicioDatos(Mapeador):
     def _procesar_suscripcion(self, suscripcion: Suscripcion) -> SuscripcionDTO:
         suscripcion_dto = SuscripcionDTO()
         suscripcion_dto.codigo = suscripcion.codigo.valor
-        suscripcion_dto.cliente = self._procesar_cliente(suscripcion.cliente)
+        # suscripcion_dto.cliente = self._procesar_cliente(suscripcion.cliente)
         suscripcion_dto.cliente_id = suscripcion.cliente.id
-        suscripcion_dto.plan = self._procesar_plan(suscripcion.plan)
+        # suscripcion_dto.plan = self._procesar_plan(suscripcion.plan)
         suscripcion_dto.plan_id = suscripcion.plan.id
 
         suscripcion_dto.id = str(suscripcion.id)

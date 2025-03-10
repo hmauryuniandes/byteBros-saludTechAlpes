@@ -36,10 +36,10 @@ class Suscripcion(db.Model):
     __tablename__ = "suscripciones"
     id = db.Column(db.String, primary_key=True)
     codigo = db.Column(db.String, nullable=False)
-    cliente_id = db.Column(db.String, ForeignKey("clientes.id"))
-    cliente: Cliente = db.relationship("Cliente", backref=db.backref("clientes", uselist=False))
-    plan_id = db.Column(db.String, ForeignKey("planes.id"))
-    plan: Plan =  db.relationship("Plan", backref=db.backref("planes", uselist=False))
+    cliente_id = db.Column(db.String)
+    # cliente: Cliente = db.relationship("Cliente", backref=db.backref("clientes", uselist=False))
+    plan_id = db.Column(db.String)
+    # plan: Plan =  db.relationship("Plan", backref=db.backref("planes", uselist=False))
 
 class Experto(db.Model):
     __tablename__ = "experto"
@@ -82,10 +82,10 @@ class ServicioDatos(db.Model):
     id = db.Column(db.String, primary_key=True)
     suscripcion_id = db.Column(db.String, ForeignKey("suscripciones.id"))
     suscripcion: Suscripcion = db.relationship("Suscripcion", backref=db.backref("suscripciones", uselist=False))
-    experto_id = db.Column(db.String, ForeignKey("experto.id"))
-    experto: Experto = db.relationship("Experto", backref=db.backref("experto", uselist=False))
-    nube_id = db.Column(db.String, ForeignKey("nube.id"))
-    nube: Nube=  db.relationship("Nube", backref=db.backref("nube", uselist=False))
-    dataset_id = db.Column(db.String, ForeignKey("dataset.id"))
-    dataset: DataSet=  db.relationship("DataSet", backref=db.backref("dataset", uselist=False))
+    # experto_id = db.Column(db.String, ForeignKey("experto.id"))
+    # experto: Experto = db.relationship("Experto", backref=db.backref("experto", uselist=False))
+    # nube_id = db.Column(db.String, ForeignKey("nube.id"))
+    # nube: Nube=  db.relationship("Nube", backref=db.backref("nube", uselist=False))
+    # dataset_id = db.Column(db.String, ForeignKey("dataset.id"))
+    # dataset: DataSet=  db.relationship("DataSet", backref=db.backref("dataset", uselist=False))
 

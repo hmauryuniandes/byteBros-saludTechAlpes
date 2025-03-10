@@ -21,4 +21,4 @@ class ComandoCompensacionCrearSuscripcionPayload(ComandoIntegracion):
     id = String()
 
 class ComandoCompensacionCrearSuscripcion(ComandoIntegracion):
-    data = ComandoCrearSuscripcionPayload()
+    data = ComandoCompensacionCrearSuscripcionPayload()

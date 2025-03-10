@@ -23,7 +23,8 @@ class CrearSuscripcionHandler(CrearSuscripcionBaseHandler):
     def handle(self, comando: CrearSuscripcion):
         try: 
             # Introducción de una falla aleatoria
-            estado = ['normal', 'error']
+            estado = ['normal', 'error', 'normal', 'normal']
+            # 25%
             if random.choice(estado) is 'error':
                 raise 'Error generado aleatoriamente'
 

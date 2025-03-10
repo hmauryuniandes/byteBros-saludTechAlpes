@@ -50,7 +50,7 @@ class DataSetDTO(DTO):
 @dataclass(frozen=True)
 class ServicioDatosDTO(DTO):
     suscripcion: SuscripcionDTO = field(default_factory=SuscripcionDTO)
-    experto: ExpertoDTO = field(default_factory=ExpertoDTO)
-    nube: NubeDTO = field(default_factory=NubeDTO)
-    dataset: DataSetDTO = field(default_factory=DataSetDTO)
+    # experto: ExpertoDTO = field(default_factory=ExpertoDTO)
+    # nube: NubeDTO = field(default_factory=NubeDTO)
+    # dataset: DataSetDTO = field(default_factory=DataSetDTO)
     id: str = field(default_factory=str)

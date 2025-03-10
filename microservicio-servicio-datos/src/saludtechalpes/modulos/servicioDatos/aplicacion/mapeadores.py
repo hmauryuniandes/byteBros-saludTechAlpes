@@ -21,11 +21,10 @@ class MapeadorServicioDatosDTOJson(AppMap):
         return PlanDTO(codigo, nombre)
     
     def _procesar_suscripcion(self, suscripcion: dict) -> SuscripcionDTO:
-        suscripcion = str(suscripcion.get('id_suscripcion'))
-        plan = str(suscripcion.get('id_plan'))
+        id_suscripcion = suscripcion.get('id_suscripcion')
+        plan = suscripcion.get('id_plan')
         cliente = suscripcion.get('id_cliente')
-
-        return SuscripcionDTO(suscripcion, plan, cliente)
+        return SuscripcionDTO(suscripcion=id_suscripcion, plan=plan, cliente=cliente)
     
     def _procesar_experto(self, experto: dict) -> ExpertoDTO:
         codigo = experto.get('codigo')
@@ -50,12 +49,6 @@ class MapeadorServicioDatosDTOJson(AppMap):
     
     def externo_a_dto(self, externo: dict) -> ServicioDatosDTO:
         suscripcion = self._procesar_suscripcion(externo)
-
-        # TODO
-        # suscripcion_dto.facturas = list()
-        # for factura in externo.get('facturas', list()):
-        #     suscripcion_dto.facturas.append(self._procesar_factura(factura))
-
         return ServicioDatosDTO(suscripcion=suscripcion)
 
     def dto_a_externo(self, dto: ServicioDatosDTO) -> dict:
@@ -78,17 +71,15 @@ class MapeadorServicioDatos(RepMap):
         return Plan(codigo=codigo, nombre=nombre)
     
     def _procesar_suscripcion(self, suscripcion: SuscripcionDTO) -> Suscripcion:
-        codigo = Codigo(suscripcion.codigo)
-        cliente_data = suscripcion.cliente  
+        codigo = Codigo(valor=suscripcion.suscripcion)
         cliente = Cliente(
-        codigo=Codigo(cliente_data.get("codigo")), 
-        nombre=Nombre(cliente_data.get("nombres"), cliente_data.get("apellidos")),
-        usuario=Usuario(cliente_data.get("usuario"))
+            codigo=Codigo(valor=suscripcion.cliente), 
+            nombre="",
+            usuario=""
         )
-        plan_data = suscripcion.plan
         plan = Plan(
-            codigo = Codigo(plan_data.get("codigo")),
-            nombre = NombrePlan(plan_data.get("nombre"))
+            codigo = Codigo(valor=suscripcion.plan),
+            nombre = NombrePlan(nombre=suscripcion.plan)
         )
         return Suscripcion(codigo=codigo, cliente=cliente, plan=plan)
     
@@ -155,10 +146,7 @@ class MapeadorServicioDatos(RepMap):
 
     def dto_a_entidad(self, dto: ServicioDatosDTO) -> ServicioDatos:
         suscripcion = self._procesar_suscripcion(dto.suscripcion)
-        #TODO
-        # suscripcion.facturas = list()
-
-        return ServicioDatos(suscripcion=suscripcion, experto=experto, nube=nube, dataset=dataset)
+        return ServicioDatos(suscripcion=suscripcion)
 
 
 

@@ -15,15 +15,15 @@ class ServicioDatosCreada(EventoDominio):
 @dataclass
 class InfraestructuraCreada(EventoDominio):
     id_serviciodatos: uuid.UUID = None
-    id_suscripcion: uuid.UUID = None
+    id_suscripcion: str = None
 
 
 @dataclass
-class InfraestrucraNoCreada(EventoDominio):
+class InfraestructuraNoCreada(EventoDominio):
     id_suscripcion: uuid.UUID = None
 
 @dataclass
 class InfraestructuraEliminada(EventoDominio):
     id_serviciodatos: uuid.UUID = None
-    id_suscripcion: uuid.UUID = None
+    id_suscripcion: str = None
     

@@ -118,9 +118,10 @@ class CoordinadorOrquestacion(CoordinadorSaga, ABC):
                 paso_anterior = self.pasos[index-1]
                 self.persistir_en_saga_log(paso_anterior, "Compensacion")
                 self.publicar_comando(evento, paso_anterior.compensacion)
+                self.terminar()
         elif isinstance(evento, paso.evento):
             paso_siguiente = self.pasos[index+1]
-            self.persistir_en_saga_log(paso_anterior, "Inicio")
+            self.persistir_en_saga_log(paso_siguiente, "Inicio")
             self.publicar_comando(evento, paso_siguiente.comando)
 
 

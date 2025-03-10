@@ -26,17 +26,18 @@ class Despachador:
     # Comandos: 
 
     def publicar_comando(self, comando, topico):
+        comando = dict(
+            id = str(uuid.uuid4()),
+            time=utils.time_millis(),
+            specversion = "v1",
+            type = str(type(comando).__name__),
+            ingestion=utils.time_millis(),
+            datacontenttype="AVRO",
+            service_name = "BFF Web",
+            data = comando.data.__dict__
+        )
+        print(f'Enviando Comando {str(type(comando).__name__)}')
+        self.publicar_mensaje(comando, topico, f"public/default/{topico}")
 
-        if type(comando).__name__ == "ComandoCrearSuscripcion":
 
-            comando = dict(
-                id = str(uuid.uuid4()),
-                time=utils.time_millis(),
-                specversion = "v1",
-                type = "ComandoCrearSuscripcion",
-                ingestion=utils.time_millis(),
-                datacontenttype="AVRO",
-                service_name = "BFF Web",
-                data = comando.data.__dict__
-            )
-            self.publicar_mensaje(comando, topico, f"public/default/{topico}")
+          

@@ -126,7 +126,18 @@ def suscribirse_a_comandos(app=None):
             try:
                 with app.app_context():
                     suscripcion_dict = valor.data.__dict__
-                    comando = IniciarSuscripcion(data=suscripcion_dict)
+                    comando = IniciarSuscripcion(
+                        id_suscripcion = suscripcion_dict.get('id_suscripcion'),
+                        cliente_codigo = suscripcion_dict.get('cliente_codigo'),
+                        cliente_nombres = suscripcion_dict.get('cliente_nombres'),
+                        cliente_apellidos = suscripcion_dict.get('cliente_apellidos'),
+                        cliente_usuario = suscripcion_dict.get('cliente_usuario'),
+                        cliente_rut = suscripcion_dict.get('cliente_rut'),
+                        cliente_cedula = suscripcion_dict.get('cliente_cedula'),
+                        cliente_email = suscripcion_dict.get('cliente_email'),
+                        plan_codigo = suscripcion_dict.get('plan_codigo'),
+                        plan_nombre = suscripcion_dict.get('plan_nombre')
+                    )
                     ejecutar_commando(comando)
             except:
                 logging.error('ERROR: Procesando comando!')

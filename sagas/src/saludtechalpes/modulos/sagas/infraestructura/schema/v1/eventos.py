@@ -1,6 +1,7 @@
 from pulsar.schema import *
 from saludtechalpes.seedwork.infraestructura.schema.v1.eventos import EventoIntegracion
 
+# Suscripciones
 class SuscripcionCreadaPayload(Record):
     codigo_cliente = String()
     codigo_plan = String()
@@ -21,6 +22,7 @@ class SuscripcionEliminadaPayload(Record):
 class EventoSuscripcionEliminada(EventoIntegracion):
     data = SuscripcionEliminadaPayload()
 
+# Servicios de datos
 class InfraestructuraCreadaPayload(Record):
     id_serviciodatos = String()
     id_suscripcion = String()
