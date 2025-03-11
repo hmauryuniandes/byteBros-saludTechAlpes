@@ -410,9 +410,12 @@ docker-compose --profile pulsar --profile sagas --profile suscripciones --profil
 **URL BFF WEB:**
 http://34.136.120.7:5005
 
-### DOCUMENTO DE RESULTADOS DE EXPERIMENTOS
+### [DOCUMENTO DE RESULTADOS DE EXPERIMENTOS](https://github.com/hmauryuniandes/byteBros-saludTechAlpes/blob/main/Resultados%20Experimentos.pdf)
+
+### [MAPA DE CONTEXTO](https://github.com/user-attachments/assets/bb600e58-b92b-4ebd-8bc4-2c75c6a86edf)
 
 
+### [DIAGRAMAS](https://github.com/hmauryuniandes/byteBros-saludTechAlpes/blob/main/Diagramas_semana_2.pdf) 
 
 ### Colección de postman para pruebas:
 
